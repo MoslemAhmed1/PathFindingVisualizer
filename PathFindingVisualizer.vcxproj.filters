@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Grid">
+      <UniqueIdentifier>{09905322-e4ac-4725-a832-911087e0b158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms">
+      <UniqueIdentifier>{f7124df7-d88b-405c-a063-085e92170838}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ApplicationManager">
+      <UniqueIdentifier>{280043d2-9fe7-4244-97d5-7e9e392612f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{5b070607-c2cf-415c-93e9-835066e30d5e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BFS.cpp">
+      <Filter>Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar.cpp">
+      <Filter>Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Dijkstra.cpp">
+      <Filter>Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CellPosition.cpp">
+      <Filter>Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="Output.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ApplicationManager.cpp">
+      <Filter>ApplicationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Action.cpp">
+      <Filter>ApplicationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BFS.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Dijkstra.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CellPosition.h">
+      <Filter>Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="DEFS.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Info.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="APP_Info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationManager.h">
+      <Filter>ApplicationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Action.h">
+      <Filter>ApplicationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
