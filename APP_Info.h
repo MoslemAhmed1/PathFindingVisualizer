@@ -1,5 +1,5 @@
 /*
-Raylib Functions Needed :
+Raylib Functions :
 - Window
     // Window-related functions
     void InitWindow(int width, int height, const char *title);  // Initialize window and OpenGL context

@@ -1,5 +1,3 @@
-/*
-
 #pragma once
 
 #include "DEFS.h"
@@ -10,7 +8,7 @@ class Output;
 class Grid;
 
 // Main class that manages everything in the application.
-class ApplicationManager
+class App
 {
 	// Pointer to the Grid
 	Grid* pGrid;
@@ -19,10 +17,14 @@ class ApplicationManager
 	Input* pIn;
 	Output* pOut;
 
+	bool running;
+
 public:
 
-	ApplicationManager();  // Constructor: where the Input, Ouput and Grid are allocated
-	~ApplicationManager(); // Destructor for needed deallocations
+	App();  // Constructor: where the Input, Ouput and Grid are allocated
+	~App(); // Destructor for needed deallocations
+
+	void Run();
 
 	// ========== Interface Management Functions ==========
 
@@ -32,10 +34,6 @@ public:
 
 	// ========== Action-Related Functions ==========
 
-	ActionType GetUserAction() const; // Reads the input command from the user and returns the corresponding action type
-
 	void ExecuteAction(ActionType);  // Creates an action of the passed actionType and executes it
 
 };
-
-*/

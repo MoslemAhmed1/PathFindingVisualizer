@@ -137,8 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Action.cpp" />
-    <ClCompile Include="ApplicationManager.cpp" />
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="BFS.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -151,8 +150,7 @@
     <ClCompile Include="Output.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Action.h" />
-    <ClInclude Include="ApplicationManager.h" />
+    <ClInclude Include="App.h" />
     <ClInclude Include="APP_Info.h" />
     <ClInclude Include="Astar.h" />
     <ClInclude Include="BFS.h" />

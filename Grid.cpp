@@ -3,23 +3,21 @@
 #include "Dijkstra.h"
 #include "Astar.h"
 
-Grid::Grid()
+Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn, pOut
 {
-    grid.resize(NUM_VERTICAL_CELLS, vector<Cell*>(NUM_HORIZONTAL_CELLS));
+    grid.resize(NumVerticalCells, vector<Cell*>(NumHorizontalCells));
 
 	// Allocate the Cell Objects of the Grid
-	for (int rows = 0; rows < NUM_VERTICAL_CELLS; rows++)
+	for (int rows = 0; rows < NumVerticalCells; rows++)
 	{
-		for (int cols = 0; cols < NUM_HORIZONTAL_CELLS; cols++)
+		for (int cols = 0; cols < NumHorizontalCells; cols++)
 		{
 			grid[rows][cols] = new Cell(rows, cols);
 		}
 	}
 
-    AddWalls();
-
-    start = grid[0][0];
-    end = grid[4][4];
+    start = nullptr;
+    end = nullptr;
 }
 
 // ========= Common Algorithm Functions =========
@@ -120,35 +118,53 @@ void Grid::PrintGrid()
     }
 }
 
-void Grid::AddWalls()
+bool Grid::SetStartCell(int r, int c)
 {
-    // add some walls
-    grid[0][3]->SetCellState(WALL);
-    grid[1][0]->SetCellState(WALL);
-    grid[1][1]->SetCellState(WALL);
-    grid[1][3]->SetCellState(WALL);
-    grid[3][1]->SetCellState(WALL);
-    grid[3][2]->SetCellState(WALL);
-    grid[3][3]->SetCellState(WALL);
-    grid[3][4]->SetCellState(WALL);
+    if (start && grid[r][c] == start)
+    {
+        grid[r][c]->SetCellState(PATH);
+        start = nullptr;
+        return true;
+    }
+
+    if (start && start != grid[r][c])
+        return false;
+
+    if (grid[r][c]->GetCellState() == PATH)
+    {
+        start = grid[r][c];
+        grid[r][c]->SetCellState(START);
+        return true;
+    }
+    
+    return false;
 }
 
-void Grid::SetStartCell(int r, int c)
+bool Grid::SetEndCell(int r, int c)
 {
-    // TODO : some verifications later
-    start = grid[r][c];
-}
+    if (end && grid[r][c] == end)
+    {
+        grid[r][c]->SetCellState(PATH);
+        end = nullptr;
+        return true;
+    }
 
-void Grid::SetEndCell(int r, int c)
-{
-    // TODO : some verifications later
-    end = grid[r][c];
+    if (end && end != grid[r][c])
+        return false;
+
+    if (grid[r][c]->GetCellState() == PATH)
+    {
+        end = grid[r][c];
+        grid[r][c]->SetCellState(END);
+        return true;
+    }
+
+    return false;
 }
 
 
 // ========= Setters and Getters Functions =========
 
-/*
 Input* Grid::GetInput() const
 {
 	return pIn;
@@ -158,11 +174,11 @@ Output* Grid::GetOutput() const
 {
 	return pOut;
 }
-*/
 
 // ========= User Interface Functions =========
 
 /*
+* // (This is copy paste from another project, might not need it)
 void Grid::UpdateInterface() const
 {
 	if (UI.InterfaceMode == MODE_DESIGN)
@@ -188,6 +204,7 @@ void Grid::UpdateInterface() const
 		// In addition, cards/snakes/ladders do NOT change positions in Play Mode, so need to draw them here too
 	}
 }
+*/
 
 void Grid::PrintErrorMessage(string msg)
 {
@@ -196,18 +213,22 @@ void Grid::PrintErrorMessage(string msg)
 	pIn->GetPointClicked(x, y);
 	pOut->ClearStatusBar();
 }
-*/
+
 
 // ===================== Additional Functions ===================== //
 
 
 void Grid::ClearGrid()
 {
-	for (int currRow = NUM_VERTICAL_CELLS - 1; currRow > 0; currRow--)
+	for (int currRow = NumVerticalCells - 1; currRow > 0; currRow--)
 	{
-		for (int currColumn = 0; currColumn <= NUM_HORIZONTAL_CELLS; currColumn++)
+		for (int currColumn = 0; currColumn <= NumHorizontalCells; currColumn++)
 		{
-			
+            grid[currRow][currColumn]->SetCellState(PATH);
+            grid[currRow][currColumn]->SetParentCell(nullptr);
+            grid[currRow][currColumn]->SetTotalCost(0);
+            grid[currRow][currColumn]->Set_G_Cost(0);
+            grid[currRow][currColumn]->Set_H_Cost(0);
 		}
 	}
 }
@@ -219,9 +240,9 @@ void Grid::ClearGrid()
 Grid::~Grid()
 {
 	// Deallocate the Cell Objects of the CellList
-	for (int i = 0; i < NUM_VERTICAL_CELLS; i++)
+	for (int i = 0; i < NumVerticalCells; i++)
 	{
-		for (int j = 0; j < NUM_HORIZONTAL_CELLS; j++)
+		for (int j = 0; j < NumHorizontalCells; j++)
 		{
 			delete grid[i][j];
 		}

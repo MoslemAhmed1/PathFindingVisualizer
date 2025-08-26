@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Grid">
       <UniqueIdentifier>{09905322-e4ac-4725-a832-911087e0b158}</UniqueIdentifier>
     </Filter>
@@ -44,13 +40,12 @@
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ApplicationManager.cpp">
+    <ClCompile Include="App.cpp">
       <Filter>ApplicationManager</Filter>
     </ClCompile>
-    <ClCompile Include="Action.cpp">
-      <Filter>ApplicationManager</Filter>
+    <ClCompile Include="Button.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BFS.h">
@@ -83,17 +78,12 @@
     <ClInclude Include="Output.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="APP_Info.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ApplicationManager.h">
-      <Filter>ApplicationManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Action.h">
+    <ClInclude Include="App.h">
       <Filter>ApplicationManager</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Header Files</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="APP_Info.h" />
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ public:
 
     vector<Cell*> BuildPath(Cell* end);
 
-    void AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, vector<vector<Cell*>>& G);
+    void AddNeighbours(queue<Cell*>& frontier, Cell* cell, vector<vector<Cell*>>& G);
 
     vector<Cell*> ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* end);
 

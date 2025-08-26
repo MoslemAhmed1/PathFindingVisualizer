@@ -72,18 +72,18 @@ void Dijkstra::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, vector
 
         if (G[nx][ny]->GetCellState() == PATH)
         {
-            frontier.push(next);
+            next->SetTotalCost(newCost);
             G[nx][ny]->SetCellState(PENDING);
             next->SetParentCell(current);
-            next->SetTotalCost(newCost);
+            frontier.push(next);
         }
         if (G[nx][ny]->GetCellState() == PENDING)
         {
             if (newCost < next->GetTotalCost())
             {
-                frontier.push(next);
                 next->SetParentCell(current);
                 next->SetTotalCost(newCost);
+                frontier.push(next);
             }
         }
     }

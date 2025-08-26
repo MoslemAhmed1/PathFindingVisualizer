@@ -2,6 +2,10 @@
 #define DEFS_H
 
 // This file contains some global constants and definitions to be used in the project.
+#include "UI_Info.h"
+#include <vector>
+#include <string>
+using namespace std;
 
 enum ChosenAlgorithm
 {
@@ -12,13 +16,13 @@ enum ChosenAlgorithm
 
 enum ActionType
 {
+	RUN_BFS,
+	RUN_DIJKSTRA,
+	RUN_ASTAR,
+	ADD_WALL,
 	ADD_START,
 	ADD_END,
-	ADD_WALL,
 	CLEAR_GRID,
-	// BFS,
-	// DIJKSTRA,
-	// ASTAR,
 
 	EMPTY,				// Empty Area in ToolBar (NOT inside any action icon)
 	GRID_AREA,			// Inside Grid Area
@@ -31,7 +35,20 @@ enum CellState
 	WALL,
 	PENDING,
 	VISITED,
+	START,
+	END,
 	FINAL_PATH
+};
+
+enum ButtonType
+{
+	BFS_BTN,
+	DIJKSTRA_BTN,
+	ASTAR_BTN,
+	ADD_WALL_BTN,
+	ADD_START_BTN,
+	ADD_END_BTN,
+	CLEAR_GRID_BTN
 };
 
 #endif

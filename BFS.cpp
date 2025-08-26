@@ -21,7 +21,7 @@ vector<Cell*> BFS::BuildPath(Cell* end)
     return path;
 }
 
-void BFS::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, vector<vector<Cell*>>& G)
+void BFS::AddNeighbours(queue<Cell*>& frontier, Cell* cell, vector<vector<Cell*>>& G)
 {
     int x = cell->GetCellPosition().VCell();
     int y = cell->GetCellPosition().HCell();
@@ -53,7 +53,7 @@ vector<Cell*> BFS::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* e
 {
     // 1- Create frontier queue
     int rows = G.size(), cols = G[0].size();
-    priority_queue<Cell*> frontier;
+    queue<Cell*> frontier;
 
     // 2- Process the start node
     frontier.push(start);
@@ -66,7 +66,7 @@ vector<Cell*> BFS::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* e
     while (!frontier.empty())
     {
 
-        Cell* cell = frontier.top();
+        Cell* cell = frontier.front();
         frontier.pop();
 
 

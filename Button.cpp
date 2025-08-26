@@ -1,11 +1,10 @@
 #include "Button.h"
 
-Button::Button(const char* text, Vector2 buttonPosition)
+Button::Button(string text, Vector2 position, ButtonType type)
 {
-	// Get text width
-
-	buttonSize.x = buttonPosition.x;
-	buttonSize.y = buttonPosition.y;
+	buttonText = text.c_str();
+	buttonBounds = { position.x, position.y, (float) UI.ButtonWidth, (float) UI.ButtonHeight };
+	buttonType = type;
 }
 
 Button::~Button()
@@ -13,14 +12,9 @@ Button::~Button()
 
 }
 
-void Button::Draw()
+bool Button::isPressed(Vector2 mousePos, bool mousePressed) const
 {
-	// Use DrawRectangle Function
-}
-
-bool Button::isPressed(Vector2 mousePos, bool mousePressed)
-{
-	if (CheckCollisionPointRec(mousePos, buttonSize) && mousePressed)
+	if (CheckCollisionPointRec(mousePos, buttonBounds) && mousePressed)
 	{
 		return true;
 	}

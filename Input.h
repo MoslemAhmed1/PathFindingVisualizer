@@ -8,21 +8,20 @@
 // forward declarations (their includes are in the cpp)
 class Output;
 
-class Input		// The application manager & grid (phase 2) should have a pointer to this class
+class Input		// The application manager & grid should have a pointer to this class
 {
-private:
 
-	// window* pWind;	// Pointer to the Graphics Windo
+	vector<Button> buttons;
 
 public:
 
-	// ========== General Functions ==========
+	Input(vector<Button>& buttons);
 
-	// Input(window* pW);  // Consturctor: Points to the passed window pointer
+	// ========== General Functions ==========
 
 	void GetPointClicked(int& x, int& y) const; // Wait for a Mouse Click and Gets the real coordinates (x,y) of it
 
-	// ========== Game Functions ==========
+	// ========== App Functions ==========
 
 	ActionType GetUserAction() const;	 // Reads a user click and map it to its corresponding ActionType
 

@@ -1,40 +1,50 @@
 #include "raylib.h"
-#include "ApplicationManager.h"
+// #include "ApplicationManager.h"
 #include "Grid.h"
 using namespace std;
 
-int main(int argc, char* argv)
+int main() 
 {
 
-    Grid grid;
+    //Grid grid;
 
-    cout << "GRID\n";
-    grid.PrintGrid();
-    cout << "PATH\n";
-    grid.PrintPath(ASTAR_ALGORITHM);
+    //cout << "GRID\n";
+    //grid.PrintGrid();
+    //cout << "PATH\n";
+    //grid.PrintPath(BFS_ALGORITHM);
 
-    // auto path = grid.GetPath(BFS_ALGORITHM);
+    // Initialization
+    InitWindow(1000, 600, "raylib - starter test");
 
-/*
-    if (path.empty())
-    {
-        cout << "No path found\n";
-        return 0;
+    SetTargetFPS(60); 
+
+    
+    while (!WindowShouldClose()) 
+    {    
+        BeginDrawing();
+
+        ClearBackground(RAYWHITE);
+
+        // Toolbar
+        DrawRectangle(0, 0, 1000, 80, GRAY); 
+
+        // Status Bar 
+        DrawRectangle(0, 540, 1000, 60, GRAY);
+
+        // Margins
+        //DrawRectangle(0, 80, 20, 480, YELLOW);
+        //DrawRectangle(980, 80, 20, 480, YELLOW);
+        //DrawRectangle(0, 80, 1000, 10, YELLOW);
+        //DrawRectangle(0, 550, 1000, 10, YELLOW);
+
+        EndDrawing();
     }
-    else
-    {
-        cout << "Path found:\n";
-        for (auto cell : path) {
-            cout << "(" << cell->GetCellPosition().VCell() << "," << cell->GetCellPosition().HCell() << ") ";
-        }
-        cout << "\n";
-    }
-*/
-   
+
+    
+    CloseWindow();
+
     return 0;
-
 }
-
 
 /*
 int main()
@@ -96,3 +106,20 @@ Outline (later) :
     - 3 Buttons : BFS / Dijkstra / AStar
 */
 
+/*
+    auto path = grid.GetPath(BFS_ALGORITHM);
+
+    if (path.empty())
+    {
+        cout << "No path found\n";
+        return 0;
+    }
+    else
+    {
+        cout << "Path found:\n";
+        for (auto cell : path) {
+            cout << "(" << cell->GetCellPosition().VCell() << "," << cell->GetCellPosition().HCell() << ") ";
+        }
+        cout << "\n";
+    }
+*/

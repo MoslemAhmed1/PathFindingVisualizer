@@ -85,20 +85,22 @@ void Astar::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, Cell* end
 
         if (G[nx][ny]->GetCellState() == PATH)
         {
-            frontier.push(next);
-            G[nx][ny]->SetCellState(PENDING);
             next->Set_G_Cost(newCost);
             next->Set_H_Cost(priority - newCost);
             next->SetTotalCost(priority);
+            G[nx][ny]->SetCellState(PENDING);
+            next->SetParentCell(current);
+            frontier.push(next);
         }
         if (G[nx][ny]->GetCellState() == PENDING)
         {
             if (priority < next->GetTotalCost())
             {
-                frontier.push(next);
                 next->Set_G_Cost(newCost);
                 next->Set_H_Cost(priority - newCost);
                 next->SetTotalCost(priority);
+                next->SetParentCell(current);
+                frontier.push(next);
             }
         }
     }
