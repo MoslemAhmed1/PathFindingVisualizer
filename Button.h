@@ -10,11 +10,11 @@ public:
 
 	Rectangle buttonBounds;
 
-	const char* buttonText;
+	string buttonText;
 	
 	Button(string text, Vector2 position, ButtonType type);
 	
-	bool isPressed(Vector2 mousePos, bool mousePressed) const;
+	bool isPressed(Vector2 mousePos) const;
 
 	~Button();
 };

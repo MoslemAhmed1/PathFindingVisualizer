@@ -36,40 +36,28 @@ CellPosition::CellPosition(int v, int h)
 	SetHCell(h);
 }
 
-/*
-CellPosition::CellPosition(int cellNum)
-{
-	(*this) = GetCellPositionFromNum(cellNum); // the function call with build a cell position (vCell and hCell)
-	// from the passed (cellNum)
-	// (*this) = ... --> this will copy the returned (vCell and hCell)
-	//                   to the data members (vCell and hCell)
-}
-*/
-
 bool CellPosition::SetVCell(int v)
 {
-	///TODO: Implement this function as described in the .h file (don't forget the validation)
 
-	if (v >= 0 && v <= 8)
+	if (v >= 0 && v < NumVerticalCells)
 	{
 		vCell = v;
 		return true;
 	}
 
-	return false; // this line sould be changed with your implementation
+	return false;
 }
 
 bool CellPosition::SetHCell(int h)
 {
-	///TODO: Implement this function as described in the .h file (don't forget the validation)
 
-	if (h >= 0 && h <= 10)
+	if (h >= 0 && h < NumHorizontalCells)
 	{
 		hCell = h;
 		return true;
 	}
 
-	return false; // this line sould be changed with your implementation
+	return false;
 }
 
 int CellPosition::VCell() const
@@ -84,14 +72,13 @@ int CellPosition::HCell() const
 
 bool CellPosition::IsValidCell() const
 {
-	///TODO: Implement this function as described in the .h file
 
-	if ((VCell() >= 0 && VCell() <= 8) && (HCell() >= 0 && HCell() <= 10))
+	if ((VCell() >= 0 && VCell() < NumVerticalCells) && (HCell() >= 0 && HCell() < NumHorizontalCells))
 	{
 		return true;
 	}
 
-	return false; // this line sould be changed with your implementation
+	return false;
 }
 
 

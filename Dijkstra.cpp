@@ -1,7 +1,7 @@
 #include "Dijkstra.h"
 
-Dijkstra::Dijkstra(vector<vector<Cell*>> grid, Cell* start, Cell* end, vector<Cell*>& path)
-{
+Dijkstra::Dijkstra(vector<vector<Cell*>> grid, Cell* start, Cell* end, vector<Cell*>& path, Output* pOut) : pOut(pOut)
+{       
     path = ApplyAlgorithm(grid, start, end);
 }
 
@@ -76,6 +76,10 @@ void Dijkstra::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, vector
             G[nx][ny]->SetCellState(PENDING);
             next->SetParentCell(current);
             frontier.push(next);
+            BeginDrawing();
+            pOut->DrawCell(cell->GetCellPosition(), PENDING); // Draw pending cell
+            EndDrawing();
+            WaitTime(0.01); // 10ms delay for visualization
         }
         if (G[nx][ny]->GetCellState() == PENDING)
         {
@@ -91,6 +95,9 @@ void Dijkstra::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, vector
 
 vector<Cell*> Dijkstra::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* end)
 {
+    if (!start || !end)
+        return {};
+
     // 1- Create frontier queue, parent array, distance array(weight)
     int rows = G.size(), cols = G[0].size();
     priority_queue<Cell*> frontier;
@@ -116,6 +123,10 @@ vector<Cell*> Dijkstra::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Ce
 
         AddNeighbours(frontier, cell, G);
         cell->SetCellState(VISITED);
+        BeginDrawing();
+        pOut->DrawCell(cell->GetCellPosition(), VISITED); // Draw visited cell
+        EndDrawing();
+        WaitTime(0.01); // 10ms delay for visualization
     }
 
     return {};

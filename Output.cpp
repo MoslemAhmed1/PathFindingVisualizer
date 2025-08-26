@@ -4,61 +4,27 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////// 
 
-Output::Output()
+Output::Output(vector<Button*>& buttons)
 {
-
-	// Widths and Heights
-
-	UI.StatusBarHeight = 60;
-	UI.ToolBarHeight = 80;
-	UI.ButtonWidth = 120; // To be changed
-	UI.ButtonHeight = 40; // To be changed
-
-	UI.width = 1000;
-	UI.height = 600;
-
-	UI.LeftMargin = 200;
-	UI.TopMargin = 30;
-
-	UI.CellSize = 20;
-
-	// Pen Colors of messages of status bar and players' info
-	UI.MsgColor = RED; 
-	UI.MsgFontSize = 18;
-
-	// Background Colors of toolbar and statusbar 
-	UI.ToolBarColor = WHITE;
-	UI.StatusBarColor = LIGHTGRAY;
-
-	// Line Colors of the borders of each cell
-	UI.GridLineColor = RAYWHITE;
-	UI.CellColor_Path = { 161, 166, 163, 255 };
-	UI.CellColor_Wall = BLACK;
-	UI.CellColor_Pending = SKYBLUE;
-	UI.CellColor_Visited = BLUE;
-	UI.CellColor_Start = GREEN;
-	UI.CellColor_End = RED;
-	UI.CellColor_Final = MAGENTA;
-
-	UI.ButtonColor = LIGHTGRAY;
-
-
 	// Create the output window
 	InitWindow(UI.width, UI.height, "PathFinder Visualizer");
 	SetTargetFPS(60);
 
 	// Create the toolbar, grid area and status bar
-	CreateToolBar();
+	BeginDrawing();
+	ClearBackground(RAYWHITE);
+	CreateToolBar(buttons);
 	ClearGridArea();
 	ClearStatusBar();
+	EndDrawing();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////// 
 
-Input* Output::CreateInput() const
+Input* Output::CreateInput(vector<Button*>& buttons) const
 {
 	// The Input Object is created inside the Output class
-	Input* pIn = new Input();
+	Input* pIn = new Input(buttons);
 	return pIn;
 }
 
@@ -121,13 +87,24 @@ void Output::ClearGridArea() const
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Output::CreateToolBar(const vector<Button>& buttons) const
+void Output::CreateToolBar(const vector<Button*>& buttons) const
 {
 	for (int i = 0; i < buttons.size(); i++)
 	{
-		Rectangle rec = buttons[i].buttonBounds;
+		Rectangle rec = buttons[i]->buttonBounds;
 		DrawRectangleRounded(rec, 0.3f, 6, UI.ButtonColor);
-		DrawText(buttons[i].buttonText, rec.x + 5, rec.y + 5, UI.MsgFontSize, UI.MsgColor);
+
+		// Get text dimensions
+		const char* text = buttons[i]->buttonText.c_str();
+		Font font = GetFontDefault(); // Or load a custom font
+		Vector2 textSize = MeasureTextEx(font, text, UI.MsgFontSize, 1);
+
+		// Calculate centered position
+		float textX = rec.x + (rec.width - textSize.x) / 2.0f;
+		float textY = rec.y + (rec.height - textSize.y) / 2.0f;
+
+		// Draw text at centered position
+		DrawTextEx(font, text, { textX, textY }, UI.MsgFontSize, 1, UI.MsgColor);
 	}
 }
 
@@ -186,6 +163,7 @@ void Output::DrawCell(const CellPosition& cellPos, CellState state) const
 	Rectangle rect = { cellStartX, cellStartY, size, size };
 
 	DrawRectangleRounded(rect, 0.2f, 6, cellColor);
+	DrawRectangleRoundedLines(rect, 0.2f, 6, BLACK);
 
 }
 

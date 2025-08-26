@@ -5,8 +5,8 @@
 #include "CellPosition.h"
 
 // Class forward declarations (their #include is in the .cpp file)
-// class Grid;
-// class Output;
+class Grid;
+class Output;
 
 class Cell
 {
@@ -37,7 +37,7 @@ public:
 
 	// ======= Drawing Functions ======= //
 
-	// void DrawCell(Output* pOut) const;	// Draws the Cell either has Card or No Card (No ladders/snakes are drawn here)
+	void DrawCell(Output* pOut) const;	// Draws the Cell
 
 	// ======= Operator Overloading ======= //
 

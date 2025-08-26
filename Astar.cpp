@@ -1,7 +1,7 @@
 #include "Astar.h"
 
 
-Astar::Astar(vector<vector<Cell*>> grid, Cell* start, Cell* end, vector<Cell*>& path)
+Astar::Astar(vector<vector<Cell*>> grid, Cell* start, Cell* end, vector<Cell*>& path, Output* pOut) : pOut(pOut)
 {
     path = ApplyAlgorithm(grid, start, end);
 }
@@ -22,14 +22,15 @@ vector<Cell*> Astar::BuildPath(Cell* end)
     return path;
 }
 
-// Use Octile distance for 8-direction movement
 double Astar::heuristic(Cell* next, Cell* end)
 {
     CellPosition nextP = next->GetCellPosition();
     CellPosition endP = end->GetCellPosition();
     double dx = abs(endP.VCell() - nextP.VCell());
     double dy = abs(endP.HCell() - nextP.HCell());
-    return (dx + dy) + (sqrt(2) - 2) * min(dx, dy);
+    return dx + dy; // Manhattan Distance for 4 direction movement
+
+    // return (dx + dy) + (sqrt(2) - 2) * min(dx, dy); (Octile Distance for 8-direction movement)
 }
 
 double Astar::CalcDistance(double curr_distance, Cell* curr, Cell* next)
@@ -91,6 +92,10 @@ void Astar::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, Cell* end
             G[nx][ny]->SetCellState(PENDING);
             next->SetParentCell(current);
             frontier.push(next);
+            BeginDrawing();
+            pOut->DrawCell(cell->GetCellPosition(), PENDING); // Draw pending cell
+            EndDrawing();
+            WaitTime(0.01); // 10ms delay for visualization
         }
         if (G[nx][ny]->GetCellState() == PENDING)
         {
@@ -108,6 +113,9 @@ void Astar::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, Cell* end
 
 vector<Cell*> Astar::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* end)
 {
+    if (!start || !end)
+        return {};
+
     // 1- Create frontier queue, parent array, distance array(weight)
     int rows = G.size(), cols = G[0].size();
     priority_queue<Cell*> frontier;
@@ -135,6 +143,10 @@ vector<Cell*> Astar::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell*
 
         AddNeighbours(frontier, cell, end, G);
         cell->SetCellState(VISITED);
+        BeginDrawing();
+        pOut->DrawCell(cell->GetCellPosition(), VISITED); // Draw visited cell
+        EndDrawing();
+        WaitTime(0.01); // 10ms delay for visualization
     }
 
     return {}; // no path found

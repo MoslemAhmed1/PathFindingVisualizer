@@ -1,21 +1,22 @@
 #pragma once
 
 #include "DEFS.h"
-#include "UI_Info.h" 
+#include "UI_Info.h"
 #include "raylib.h"
 #include "CellPosition.h"
 
 // forward declarations (their includes are in the cpp)
 class Output;
+class Button;
 
 class Input		// The application manager & grid should have a pointer to this class
 {
 
-	vector<Button> buttons;
+	vector<Button*> buttons;
 
 public:
 
-	Input(vector<Button>& buttons);
+	Input(vector<Button*>& buttons);
 
 	// ========== General Functions ==========
 

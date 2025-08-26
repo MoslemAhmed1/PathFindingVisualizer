@@ -6,22 +6,21 @@
 //								General Functions									    //
 //======================================================================================//
 
-Input::Input(vector<Button>& buttons) : buttons(buttons)
+Input::Input(vector<Button*>& buttons) : buttons(buttons)
 {
 
 }
 
 void Input::GetPointClicked(int& x, int& y) const
 {
-	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+	while (!WindowShouldClose())
 	{
-		x = GetMouseX();
-		y = GetMouseY();
-	}
-	else
-	{
-		x = -1;
-		y = -1;
+		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+		{
+			x = GetMouseX();
+			y = GetMouseY();
+			return;
+		}
 	}
 }
 
@@ -31,18 +30,18 @@ void Input::GetPointClicked(int& x, int& y) const
 
 ActionType Input::GetUserAction() const
 {
-	Vector2 mousePos = GetMousePosition();
-	float x = mousePos.x, y = mousePos.y;
-	bool mousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-	ButtonType type;
+	int x, y;
+	GetPointClicked(x, y);
+	Vector2 mousePos = { (float)x, (float)y };
+	ButtonType type = NONE;
 
 	// [1] If user clicks on the Toolbar
 	if (y >= 0 && y < UI.ToolBarHeight)
 	{
 		for (int i = 0; i < buttons.size(); i++)
 		{
-			if (buttons[i].isPressed(mousePos, mousePressed))
-				type = buttons[i].buttonType;
+			if (buttons[i]->isPressed(mousePos))
+				type = buttons[i]->buttonType;
 		}
 
 		switch (type)
@@ -90,12 +89,7 @@ ActionType Input::GetUserAction() const
 CellPosition Input::GetCellClicked() const
 {
 	int x, y;
-	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-	{
-		x = GetMouseX();
-		y = GetMouseY();
-	}
-
+	GetPointClicked(x, y);
 	CellPosition cellPos;
 
 	if ((y >= UI.ToolBarHeight && y <= (UI.height - UI.StatusBarHeight)) && (x >= UI.LeftMargin && x <= (UI.width - UI.LeftMargin)))

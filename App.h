@@ -2,6 +2,7 @@
 
 #include "DEFS.h"
 #include "UI_Info.h"
+#include "Button.h"
 
 class Input;
 class Output;
@@ -17,7 +18,7 @@ class App
 	Input* pIn;
 	Output* pOut;
 
-	bool running;
+	vector<Button*> buttons;
 
 public:
 
@@ -34,6 +35,16 @@ public:
 
 	// ========== Action-Related Functions ==========
 
-	void ExecuteAction(ActionType);  // Creates an action of the passed actionType and executes it
-
+	void ExecuteAction(ActionType ActType);  // Creates an action of the passed actionType and executes it
+	// To execute an action :
+	// 1- Get the ActionType
+	// 2- Read its parameters
+	// 3- Proceed with execution logic
+	void AddStart();
+	void AddEnd();
+	void AddWall();
+	void ClearGrid();
+	void Run_BFS();
+	void Run_Dijkstra();
+	void Run_AStar();
 };

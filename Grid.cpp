@@ -29,13 +29,13 @@ vector<Cell*> Grid::GetPath(ChosenAlgorithm algorithm)
     switch (algorithm)
     {
     case BFS_ALGORITHM:
-        BFS(grid, start, end, path);
+        BFS(grid, start, end, path, pOut);
         break;
     case DIJKSTRA_ALGORITHM:
-        Dijkstra(grid, start, end, path);
+        Dijkstra(grid, start, end, path, pOut);
         break;
     case ASTAR_ALGORITHM:
-        Astar(grid, start, end, path);
+        Astar(grid, start, end, path, pOut);
         break;
     }
 
@@ -44,11 +44,17 @@ vector<Cell*> Grid::GetPath(ChosenAlgorithm algorithm)
 
 void Grid::PrintPath(ChosenAlgorithm algorithm)
 {
+    if (!start || !end) 
+    {
+        PrintMessage("Start or end not set!");
+        return;
+    }
+
     vector<Cell*> path = GetPath(algorithm);
 
     if (path.empty())
     {
-        cout << "No path found\n";
+        PrintMessage("No path found!");
         return;
     }
 
@@ -59,67 +65,18 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
     for (Cell* cell : path)
     {
         displayGrid[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()]->SetCellState(FINAL_PATH);
+        pOut->DrawCell(cell->GetCellPosition(), VISITED); // Draw visited cell
+        EndDrawing();
+        WaitTime(0.01); // 10ms delay for visualization
     }
 
-    // Print the grid with symbols
-    for (int r = 0; r < displayGrid.size(); r++)
-    {
-        for (int c = 0; c < displayGrid[r].size(); c++)
-        {
-            if (grid[r][c]->GetCellState() == WALL)
-            {
-                cout << "# ";
-            }
-            else if (start->GetCellPosition().VCell() == r && start->GetCellPosition().HCell() == c)
-            {
-                cout << "S ";
-            }
-            else if (end->GetCellPosition().VCell() == r && end->GetCellPosition().HCell() == c)
-            {
-                cout << "E ";
-            }
-            else if (displayGrid[r][c]->GetCellState() == FINAL_PATH)
-            {
-                cout << "* ";
-            }
-            else
-            {
-                cout << ". ";
-            }
-        }
-        cout << "\n";
-    }
-}
-
-void Grid::PrintGrid()
-{
-    for (int r = 0; r < grid.size(); r++)
-    {
-        for (int c = 0; c < grid[r].size(); c++)
-        {
-            if (start->GetCellPosition().VCell() == r && start->GetCellPosition().HCell() == c)
-            {
-                cout << "S ";
-            }
-            else if (end->GetCellPosition().VCell() == r && end->GetCellPosition().HCell() == c)
-            {
-                cout << "E ";
-            }
-            else if (grid[r][c]->GetCellState() == WALL)
-            {
-                cout << "# ";
-            }
-            else
-            {
-                cout << ". ";
-            }
-        }
-        cout << "\n";
-    }
 }
 
 bool Grid::SetStartCell(int r, int c)
 {
+    if (r < 0 || r >= NumVerticalCells || c < 0 || c >= NumHorizontalCells)
+        return false;
+
     if (start && grid[r][c] == start)
     {
         grid[r][c]->SetCellState(PATH);
@@ -162,6 +119,18 @@ bool Grid::SetEndCell(int r, int c)
     return false;
 }
 
+bool Grid::SetWallCell(int r, int c)
+{
+    if (grid[r][c]->GetCellState() == WALL)
+        grid[r][c]->SetCellState(PATH);
+    else if (grid[r][c]->GetCellState() == PATH)
+        grid[r][c]->SetCellState(WALL);
+    else
+        return false;
+
+    return true;
+}
+
 
 // ========= Setters and Getters Functions =========
 
@@ -175,38 +144,30 @@ Output* Grid::GetOutput() const
 	return pOut;
 }
 
-// ========= User Interface Functions =========
+Cell* Grid::GetStartCell() const 
+{ 
+    return start; 
+}
 
-/*
-* // (This is copy paste from another project, might not need it)
+Cell* Grid::GetEndCell() const 
+{ 
+    return end; 
+}
+
+// ========= User Interface Functions =========
 void Grid::UpdateInterface() const
 {
-	if (UI.InterfaceMode == MODE_DESIGN)
-	{
-		// 1- Draw cells 
-	}
-	else // In PLAY Mode
-	{
-		// 1- Print Player's Info
-		string playersInfo = "";
-		for (int i = 0; i < MaxPlayerCount; i++)
-		{
-			PlayerList[i]->AppendPlayerInfo(playersInfo); // passed by reference
-			if (i < MaxPlayerCount - 1) // except the last player
-				playersInfo += ", ";
-		}
-		playersInfo += " | Curr = " + to_string(currPlayerNumber);
-
-		pOut->PrintPlayersInfo(playersInfo);
-
-		// Note: UpdatePlayerCell() function --> already update drawing players in Play Mode
-		//       so we do NOT need draw all players again in UpdateInterface() of the Play mode
-		// In addition, cards/snakes/ladders do NOT change positions in Play Mode, so need to draw them here too
-	}
+    for (int row = 0; row < NumVerticalCells; row++)
+    {
+        for (int col = 0; col < NumHorizontalCells; col++)
+        {
+            grid[row][col]->DrawCell(pOut);
+        }
+    }
 }
-*/
 
-void Grid::PrintErrorMessage(string msg)
+
+void Grid::PrintMessage(string msg)
 {
 	pOut->PrintMessage(msg);
 	int x, y;
@@ -220,9 +181,9 @@ void Grid::PrintErrorMessage(string msg)
 
 void Grid::ClearGrid()
 {
-	for (int currRow = NumVerticalCells - 1; currRow > 0; currRow--)
+	for (int currRow = 0; currRow < NumVerticalCells; currRow++)
 	{
-		for (int currColumn = 0; currColumn <= NumHorizontalCells; currColumn++)
+		for (int currColumn = 0; currColumn < NumHorizontalCells; currColumn++)
 		{
             grid[currRow][currColumn]->SetCellState(PATH);
             grid[currRow][currColumn]->SetParentCell(nullptr);

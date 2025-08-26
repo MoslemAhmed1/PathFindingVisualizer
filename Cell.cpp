@@ -76,12 +76,13 @@ Cell* Cell::GetParentCell() const
 
 // ======= Drawing Functions ======= 
 
-/*
 void Cell::DrawCell(Output* pOut) const
 {
-	// pOut->DrawCell(position, -1);
+	pOut->DrawCell(position, state);
 }
-*/
+
+
+// ======= Overloading Operators =======
 
 bool Cell::operator==(const Cell& other) const
 {

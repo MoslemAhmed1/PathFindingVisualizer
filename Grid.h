@@ -1,11 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <queue>
-#include <cmath>
-
 #include "UI_Info.h"
 #include "DEFS.h"
 #include "Cell.h"
@@ -40,26 +34,26 @@ public:
 
 	void PrintPath(ChosenAlgorithm algorithm);
 
-	void PrintGrid();
-
 // ========= Others ========= //
 
 	bool SetStartCell(int r, int c);
 	bool SetEndCell(int r, int c);
+	bool SetWallCell(int r, int c);
 
 // ========= Setters and Getters Functions ========= //
 
 	Input* GetInput() const;	// Gets a Pointer to the Input
 	Output* GetOutput() const; // Gets a Pointer to the Output 
 
+	Cell* GetStartCell() const;
+	Cell* GetEndCell() const;
+
 // ========= User Interface Functions ========= //
 
-	// (This is copy paste from another project, might not need it)
 	void UpdateInterface() const;	// It Updates the Grid according to the last state of the game
 
-	void PrintErrorMessage(string msg); // Prints an error message on statusbar, Waits for mouse click then clears statusbar
-										// We added this function once here because it is used many times by other classes
-
+	void PrintMessage(string msg); // Prints a message on statusbar, Waits for mouse click then clears statusbar
+									
 // ===================== Additional Functions ===================== //
 
 	void ClearGrid();

@@ -3,8 +3,11 @@
 
 // This file contains some global constants and definitions to be used in the project.
 #include "UI_Info.h"
+#include <iostream>
+#include <algorithm>
 #include <vector>
-#include <string>
+#include <queue>
+#include <cmath>
 using namespace std;
 
 enum ChosenAlgorithm
@@ -48,7 +51,8 @@ enum ButtonType
 	ADD_WALL_BTN,
 	ADD_START_BTN,
 	ADD_END_BTN,
-	CLEAR_GRID_BTN
+	CLEAR_GRID_BTN,
+	NONE
 };
 
 #endif

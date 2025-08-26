@@ -27,9 +27,9 @@ private:
 
 public:
 
-	Output();	// A Constructor for any needed initializations
+	Output(vector<Button*>& buttons);	// A Constructor for any needed initializations
 
-	Input* CreateInput() const;	// Creates a pointer to the Input object	
+	Input* CreateInput(vector<Button*>& buttons) const;	// Creates a pointer to the Input object	
 
 	// ========== User Interface Functions ==========
 
@@ -37,7 +37,7 @@ public:
 
 	void ClearGridArea() const;	    // Draws an empty grid (horizontal and vertical lines with empty cells)
 
-	void CreateToolBar(const vector<Button>& buttons) const;		// Create toolbar buttons
+	void CreateToolBar(const vector<Button*>& buttons) const;		// Create toolbar buttons
 
 	void PrintMessage(string msg) const;	// Prints a message on Status bar
 
