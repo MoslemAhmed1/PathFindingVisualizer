@@ -1,9 +1,43 @@
 #include "Astar.h"
 
 
-Astar::Astar(vector<vector<Cell*>> grid, Cell* start, Cell* end, vector<Cell*>& path, Output* pOut) : pOut(pOut)
+Astar::Astar(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut) : pOut(pOut), G(grid), start(start), end(end), done(false)
+{}
+
+void Astar::Init()
 {
-    path = ApplyAlgorithm(grid, start, end);
+    if (!start || !end)
+        return;
+    frontier.push(start);
+    start->SetCellState(PENDING);
+    start->Set_G_Cost(0);
+    start->Set_H_Cost(0);
+    start->SetTotalCost(0);
+}
+
+bool Astar::Step()
+{
+    if (done || frontier.empty())
+        return true;
+
+    Cell* cell = frontier.top();
+    frontier.pop();
+
+    if (cell == end)
+    {
+        path = BuildPath(end);
+        done = true;
+        return true;
+    }
+
+    AddNeighbours(cell);
+    cell->SetCellState(VISITED);
+    return false;
+}
+
+vector<Cell*> Astar::GetPath() const
+{
+    return path;
 }
 
 vector<Cell*> Astar::BuildPath(Cell* end)
@@ -43,15 +77,16 @@ double Astar::CalcDistance(double curr_distance, Cell* curr, Cell* next)
         return curr_distance + sqrt(2);
 }
 
-void Astar::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, Cell* end, vector<vector<Cell*>>& G)
+void Astar::AddNeighbours(Cell* cell)
 {
     int x = cell->GetCellPosition().VCell();
     int y = cell->GetCellPosition().HCell();
 
     int dr[8] = { 0, -1, 0, 1, -1, -1, 1, 1 };
     int dc[8] = { -1, 0, 1, 0, -1, 1, -1, 1 };
+    int max_i = 4; // Change to 8 for diagonal
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < max_i; i++)
     {
         int nx = x + dr[i];
         int ny = y + dc[i];
@@ -69,85 +104,26 @@ void Astar::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, Cell* end
             - Check(0, 1) & (1, 0)
             4 - Down Left(1, -1)
             - Check(0, -1) & (1, 0)
-
-            if ((dr[i] == -1 && dc[i] == -1 && (G[x - 1][y].GetCellState() == WALL && G[x][y - 1].GetCellState() == WALL)) ||
-                (dr[i] == -1 && dc[i] == 1 && (G[x - 1][y].GetCellState() == WALL && G[x][y + 1].GetCellState() == WALL)) ||
-                (dr[i] == 1 && dc[i] == 1 && (G[x][y + 1].GetCellState() == WALL && G[x + 1][y].GetCellState() == WALL)) ||
-                (dr[i] == 1 && dc[i] == -1 && (G[x][y - 1].GetCellState() == WALL && G[x + 1][y].GetCellState() == WALL)))
-                continue;
         */
-
-        Cell* current = cell;
+        if ((dr[i] == -1 && dc[i] == -1 && (G[x - 1][y]->GetCellState() == WALL && G[x][y - 1]->GetCellState() == WALL)) ||
+            (dr[i] == -1 && dc[i] == 1 && (G[x - 1][y]->GetCellState() == WALL && G[x][y + 1]->GetCellState() == WALL)) ||
+            (dr[i] == 1 && dc[i] == 1 && (G[x][y + 1]->GetCellState() == WALL && G[x + 1][y]->GetCellState() == WALL)) ||
+            (dr[i] == 1 && dc[i] == -1 && (G[x][y - 1]->GetCellState() == WALL && G[x + 1][y]->GetCellState() == WALL)))
+            continue;
+        
         Cell* next = G[nx][ny];
-        // double newCost = calc_distance(cell.Get_G_Cost(), current, next);
-        double newCost = cell->Get_G_Cost() + 1;
+        double newCost = CalcDistance(cell->GetTotalCost(), cell, next);
         double priority = newCost + heuristic(next, end);
 
-
-        if (G[nx][ny]->GetCellState() == PATH)
+        bool isEnd = (next->GetCellState() == END);
+        if (next->GetCellState() == PATH || isEnd || (next->GetCellState() == PENDING && newCost < next->GetTotalCost()))
         {
             next->Set_G_Cost(newCost);
             next->Set_H_Cost(priority - newCost);
             next->SetTotalCost(priority);
             G[nx][ny]->SetCellState(PENDING);
-            next->SetParentCell(current);
+            next->SetParentCell(cell);
             frontier.push(next);
-            BeginDrawing();
-            pOut->DrawCell(next->GetCellPosition(), PENDING); // Draw pending cell
-            EndDrawing();
-            WaitTime(0.01); // 10ms delay for visualization
-        }
-        if (G[nx][ny]->GetCellState() == PENDING)
-        {
-            if (priority < next->GetTotalCost())
-            {
-                next->Set_G_Cost(newCost);
-                next->Set_H_Cost(priority - newCost);
-                next->SetTotalCost(priority);
-                next->SetParentCell(current);
-                frontier.push(next);
-            }
         }
     }
-}
-
-vector<Cell*> Astar::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* end)
-{
-    if (!start || !end)
-        return {};
-
-    // 1- Create frontier queue, parent array, distance array(weight)
-    int rows = G.size(), cols = G[0].size();
-    priority_queue<Cell*> frontier;
-
-    // 2- Process the start node
-    start->Set_G_Cost(0);
-    start->Set_H_Cost(0);
-    start->SetTotalCost(0);
-    frontier.push(start);
-
-    if (start == end)
-        return { start };
-
-    // Loop through all neighbours
-    while (!frontier.empty())
-    {
-        Cell* cell = frontier.top();
-        frontier.pop();
-
-        if (cell == end)
-            return BuildPath(end);
-
-        if (cell->GetTotalCost() > G[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()]->GetTotalCost())
-            continue;
-
-        AddNeighbours(frontier, cell, end, G);
-        cell->SetCellState(VISITED);
-        BeginDrawing();
-        pOut->DrawCell(cell->GetCellPosition(), VISITED); // Draw visited cell
-        EndDrawing();
-        WaitTime(0.01); // 10ms delay for visualization
-    }
-
-    return {}; // no path found
 }

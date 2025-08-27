@@ -55,14 +55,21 @@ void App::Run()
 		pOut->PrintMessage(pGrid->GetMessage());
 		EndDrawing();
 
-		// Handle input
-		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+		// Step the algorithm if running
+		if (pGrid->IsAlgorithmRunning()) 
 		{
-			if (waitingForCell)
+			pGrid->StepAlgorithm();
+			WaitTime(0.01); // Control animation speed
+		}
+
+		// Handle input (only if not running algorithm, to avoid interference)
+		if (!pGrid->IsAlgorithmRunning() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+		{
+			if (waitingForCell) 
 			{
 				CellPosition position = pIn->GetCellClicked();
 				ExecGridAction(pendingAction, position);
-				waitingForCell = false; // Reset flag
+				waitingForCell = false;
 				pendingAction = EMPTY;
 			}
 			else 
@@ -72,7 +79,6 @@ void App::Run()
 			}
 		}
 	}
-
 	CloseWindow();
 }
 

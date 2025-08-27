@@ -135,37 +135,55 @@ void Output::DrawCell(const CellPosition& cellPos, CellState state, bool isStart
 {	
 	int cellStartX = GetCellStartX(cellPos);
 	int cellStartY = GetCellStartY(cellPos);
-	int size = UI.CellSize;
+	int baseSize = UI.CellSize;
+	int gap = UI.cellGap;
+	int drawSize = baseSize - gap;
+
+	// Adjust starting position to center the cell with gap
+	int drawX = cellStartX + gap / 2;
+	int drawY = cellStartY + gap / 2;
+
 	Color cellColor = UI.CellColor_Path;
 
-	// Override for start/end only during PENDING or VISITED
+	// Shadow
+	DrawRectangleRounded({ (float)drawX + 2, (float)drawY + 2, (float)drawSize, (float)drawSize }, 0.2f, 6, Fade(BLACK, 0.3f));
+
+	// Override for start/end during PENDING/VISITED
 	if (isStart && (state == PENDING || state == VISITED)) 
-	{
 		cellColor = UI.CellColor_Start;
-	}
 	else if (isEnd && (state == PENDING || state == VISITED)) 
-	{
 		cellColor = UI.CellColor_End;
-	}
 	else 
 	{
 		switch (state) 
 		{
-		case PATH: cellColor = UI.CellColor_Path; break;
-		case WALL: cellColor = UI.CellColor_Wall; break;
-		case START: cellColor = UI.CellColor_Start; break;
-		case END: cellColor = UI.CellColor_End; break;
-		case PENDING: cellColor = UI.CellColor_Pending; break;
-		case VISITED: cellColor = UI.CellColor_Visited; break;
-		case FINAL_PATH: cellColor = UI.CellColor_Final; break;
+		case PATH: 
+			cellColor = UI.CellColor_Path; 
+			break;
+		case WALL: 
+			cellColor = UI.CellColor_Wall; 
+			break;
+		case START: 
+			cellColor = UI.CellColor_Start; 
+			break;
+		case END: 
+			cellColor = UI.CellColor_End; 
+			break;
+		case PENDING: 
+			cellColor = UI.CellColor_Pending; 
+			break;
+		case VISITED: 
+			cellColor = UI.CellColor_Visited; 
+			break;
+		case FINAL_PATH: 
+			cellColor = UI.CellColor_Final; 
+			break;
 		}
 	}
 
-	Rectangle rect = { (float)cellStartX, (float)cellStartY, (float)size, (float)size };
-
+	Rectangle rect = { (float)drawX, (float)drawY, (float)drawSize, (float)drawSize };
 	DrawRectangleRounded(rect, 0.2f, 6, cellColor);
 	DrawRectangleRoundedLines(rect, 0.2f, 6, BLACK);
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

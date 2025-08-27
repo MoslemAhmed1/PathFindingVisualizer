@@ -17,6 +17,7 @@ struct UI_Info	// User Interface Info.
 		ButtonHeight = 40;
 
 	int CellSize = 20;				// Size of the cell
+	int cellGap = 2;   // New gap between cells
 	int LeftMargin = 200, TopMargin = 30;
 
 	// Pen Colors of messages of status bar and players' info

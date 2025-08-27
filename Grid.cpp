@@ -19,29 +19,93 @@ Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn,
     start = nullptr;
     end = nullptr;
 
+    bfs = nullptr;
+    dijkstra = nullptr;
+    astar = nullptr;
+    algorithmRunning = false;
+
     msg = "";
 }
 
 // ========= Common Algorithm Functions =========
 
-vector<Cell*> Grid::GetPath(ChosenAlgorithm algorithm)
+void Grid::GetPath(ChosenAlgorithm algorithm) 
 {
+    algorithmRunning = true;
+    currentAlgorithm = algorithm;
     vector<Cell*> path;
-
-    switch (algorithm)
+    switch (algorithm) 
     {
     case BFS_ALGORITHM:
-        BFS(grid, start, end, path, pOut);
+        bfs = new BFS(grid, start, end, pOut);
+        bfs->Init();
         break;
     case DIJKSTRA_ALGORITHM:
-        Dijkstra(grid, start, end, path, pOut);
+        dijkstra = new Dijkstra(grid, start, end, pOut);
+        dijkstra->Init();
         break;
     case ASTAR_ALGORITHM:
-        Astar(grid, start, end, path, pOut);
+        astar = new Astar(grid, start, end, pOut);
+        astar->Init();
         break;
     }
+}
 
-    return path;
+void Grid::StepAlgorithm() 
+{
+    if (!algorithmRunning) 
+        return;
+
+    bool done = false;
+    switch (currentAlgorithm) 
+    {
+    case BFS_ALGORITHM:
+        if (bfs) done = bfs->Step();
+        break;
+    case DIJKSTRA_ALGORITHM:
+        if (dijkstra) done = dijkstra->Step();
+        break;
+    case ASTAR_ALGORITHM:
+        if (astar) done = astar->Step();
+        break;
+    }
+    if (done) 
+    {
+        algorithmRunning = false;
+        vector<Cell*> path;
+        switch (currentAlgorithm) 
+        {
+        case BFS_ALGORITHM:
+            path = bfs->GetPath();
+            delete bfs;
+            bfs = nullptr;
+            break;
+        case DIJKSTRA_ALGORITHM:
+            path = dijkstra->GetPath();
+            delete dijkstra;
+            dijkstra = nullptr;
+            break;
+        case ASTAR_ALGORITHM:
+            path = astar->GetPath();
+            delete astar;
+            astar = nullptr;
+            break;
+        }
+
+        if (path.empty()) 
+        {
+            PrintMessage("No path found!");
+        }
+        else 
+        {
+            for (Cell* cell : path) 
+            {
+                if (cell == start || cell == end)
+                    continue;
+                grid[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()]->SetCellState(FINAL_PATH);
+            }
+        }
+    }
 }
 
 void Grid::PrintPath(ChosenAlgorithm algorithm)
@@ -52,6 +116,9 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
         return;
     }
 
+    GetPath(algorithm);
+
+    /*
     vector<Cell*> path = GetPath(algorithm);
 
     if (path.empty())
@@ -64,7 +131,10 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
     vector<vector<Cell*>> displayGrid = grid;
 
     // Animate the path highlighting
-    for (Cell* cell : path) {
+    for (Cell* cell : path)
+    {
+        if (cell->GetCellState() == START || cell->GetCellState() == END)
+            continue;
         displayGrid[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()]->SetCellState(FINAL_PATH);
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -75,7 +145,7 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
         EndDrawing();
         WaitTime(0.01);
     }
-
+    */
 }
 
 bool Grid::SetStartCell(int r, int c)
@@ -115,7 +185,7 @@ bool Grid::SetEndCell(int r, int c)
     if (end && end != grid[r][c])
         return false;
 
-    if (grid[r][c]->GetCellState() == PATH)
+    if (!end && grid[r][c]->GetCellState() == PATH)
     {
         end = grid[r][c];
         grid[r][c]->SetCellState(END);
@@ -165,9 +235,16 @@ string Grid::GetMessage() const
     return msg;
 }
 
+bool Grid::IsAlgorithmRunning() const
+{
+    return algorithmRunning;
+}
+
 // ========= User Interface Functions =========
 void Grid::UpdateInterface() const
 {
+    DrawRectangleGradientV(0, 80, 1000, 540, SKYBLUE, WHITE);
+
     for (int row = 0; row < NumVerticalCells; row++) 
     {
         for (int col = 0; col < NumHorizontalCells; col++) 
@@ -217,7 +294,12 @@ Grid::~Grid()
 	{
 		for (int j = 0; j < NumHorizontalCells; j++)
 		{
-			delete grid[i][j];
+            if(grid[i][j])
+			    delete grid[i][j];
 		}
 	}
+
+    if (bfs) delete bfs;
+    if (dijkstra) delete dijkstra;
+    if (astar) delete astar;
 }

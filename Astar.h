@@ -5,10 +5,22 @@ class Astar
 {
 
     Output* pOut;
+    vector<vector<Cell*>>& G;
+    Cell* start;
+    Cell* end;
+    priority_queue<Cell*> frontier;
+    bool done;
+    vector<Cell*> path;
 
 public:
 
-    Astar(vector<vector<Cell*>> grid, Cell* start, Cell* end, vector<Cell*>& path, Output* pOut);
+    Astar(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut);
+    void Init();
+    bool Step(); // Process one node, return true if done
+    vector<Cell*> GetPath() const;
+    bool IsDone() const;
+
+private:
 
     vector<Cell*> BuildPath(Cell* end);
 
@@ -17,8 +29,6 @@ public:
 
     double CalcDistance(double curr_distance, Cell* curr, Cell* next);
 
-    void AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, Cell* end, vector<vector<Cell*>>& G);
-
-    vector<Cell*> ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* end);
+    void AddNeighbours(Cell* cell);
 
 };

@@ -1,22 +1,23 @@
 #pragma once
 
-#include "UI_Info.h"
 #include "DEFS.h"
 #include "Cell.h"
 
 #include "Input.h"
 #include "Output.h"
 #include <fstream>
-using namespace std;
 
 
 // forward declarations (the includes are in the cpp)
 class Cell;
+class BFS;
+class Dijkstra;
+class Astar;
 
 class Grid
 {
-	Output* pOut;   // A pointer to the Output object
-	Input* pIn;     // A pointer to the Input object
+	Output* pOut;   
+	Input* pIn;     
 
 	vector<vector<Cell*>> grid;		// An array of "Pointers" to All Cells of the Grid Cells
 	
@@ -25,6 +26,12 @@ class Grid
 
 	string msg;
 
+	ChosenAlgorithm currentAlgorithm;
+	BFS* bfs;
+	Dijkstra* dijkstra;
+	Astar* astar;
+	bool algorithmRunning;
+
 public:
 
 	Grid(Input* pIn, Output* pOut);		// Gives the Grid a Pointer to the Output Object and the Input Object
@@ -32,7 +39,9 @@ public:
 
 // ========= Common Algorithm Functions ========= //
 
-	vector<Cell*> GetPath(ChosenAlgorithm algorithm);
+	void GetPath(ChosenAlgorithm algorithm);
+
+	void StepAlgorithm();
 
 	void PrintPath(ChosenAlgorithm algorithm);
 
@@ -51,6 +60,8 @@ public:
 	Cell* GetEndCell() const;
 
 	string GetMessage() const;
+
+	bool IsAlgorithmRunning() const;
 
 // ========= User Interface Functions ========= //
 
