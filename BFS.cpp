@@ -46,7 +46,7 @@ void BFS::AddNeighbours(queue<Cell*>& frontier, Cell* cell, vector<vector<Cell*>
             G[nx][ny]->SetCellState(PENDING);
             next->SetParentCell(current);
             BeginDrawing();
-            pOut->DrawCell(cell->GetCellPosition(), PENDING); // Draw pending cell
+            pOut->DrawCell(next->GetCellPosition(), PENDING); // Draw pending cell
             EndDrawing();
             WaitTime(0.01); // 10ms delay for visualization
         }
@@ -58,6 +58,9 @@ vector<Cell*> BFS::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* e
     if (!start || !end)
         return {};
 
+    if (start == end)
+        return { start };
+
     // 1- Create frontier queue
     int rows = G.size(), cols = G[0].size();
     queue<Cell*> frontier;
@@ -65,9 +68,6 @@ vector<Cell*> BFS::ApplyAlgorithm(vector<vector<Cell*>>& G, Cell* start, Cell* e
     // 2- Process the start node
     frontier.push(start);
     start->SetCellState(PENDING);
-
-    if (start == end)
-        return { start };
 
     // Loop through all neighbours
     while (!frontier.empty())

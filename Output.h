@@ -1,19 +1,18 @@
 #pragma once
 
 #include "DEFS.h"
-#include "UI_Info.h" 
-#include "CellPosition.h"
 #include "Button.h"
-#include <vector>
-#include <string>
-using namespace std;
 
 // forward declarations (their includes are in the cpp)
 class Input;
 
 class Output	// The application manager & grid should have a pointer to this class
 {
+
 private:
+
+	vector<Button*> buttons; // Store buttons for redrawing
+
 
 	// ========== Some Utility Functions (Private Functions) ==========
 
@@ -37,13 +36,13 @@ public:
 
 	void ClearGridArea() const;	    // Draws an empty grid (horizontal and vertical lines with empty cells)
 
-	void CreateToolBar(const vector<Button*>& buttons) const;		// Create toolbar buttons
+	void CreateToolBar() const;		// Create toolbar buttons
 
 	void PrintMessage(string msg) const;	// Prints a message on Status bar
 
 	// ========== Game Drawing Functions ==========
 
-	void DrawCell(const CellPosition& cellpos, CellState state) const;
+	void DrawCell(const CellPosition& cellpos, CellState state, bool isStart = false, bool isEnd = false) const;
 
 	~Output();	// A Destructor for any needed deallocations
 };

@@ -4,7 +4,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////// 
 
-Output::Output(vector<Button*>& buttons)
+Output::Output(vector<Button*>& buttons) : buttons(buttons)
 {
 	// Create the output window
 	InitWindow(UI.width, UI.height, "PathFinder Visualizer");
@@ -13,7 +13,7 @@ Output::Output(vector<Button*>& buttons)
 	// Create the toolbar, grid area and status bar
 	BeginDrawing();
 	ClearBackground(RAYWHITE);
-	CreateToolBar(buttons);
+	CreateToolBar();
 	ClearGridArea();
 	ClearStatusBar();
 	EndDrawing();
@@ -87,7 +87,7 @@ void Output::ClearGridArea() const
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Output::CreateToolBar(const vector<Button*>& buttons) const
+void Output::CreateToolBar() const
 {
 	for (int i = 0; i < buttons.size(); i++)
 	{
@@ -116,7 +116,10 @@ void Output::PrintMessage(string msg) const	//Prints a message on status bar
 
 	int posY = UI.height - UI.StatusBarHeight + (UI.StatusBarHeight / 2 - UI.MsgFontSize / 2);
 
-	DrawText(msg.c_str(), 10, posY, UI.MsgFontSize, UI.MsgColor);
+	Font font = GetFontDefault(); // Or load a custom font
+	DrawTextEx(font, msg.c_str(), {10, (float)posY}, UI.MsgFontSize, 1, UI.MsgColor);
+	
+	//DrawText(msg.c_str(), 10, posY, UI.MsgFontSize, UI.MsgColor);
 	
 	//Color : UI.MsgColor
 	//Font : 18, BOLD, Verdana
@@ -128,39 +131,37 @@ void Output::PrintMessage(string msg) const	//Prints a message on status bar
 //			         			Drawing Functions   									//
 //======================================================================================//
 
-void Output::DrawCell(const CellPosition& cellPos, CellState state) const
+void Output::DrawCell(const CellPosition& cellPos, CellState state, bool isStart, bool isEnd) const
 {	
 	int cellStartX = GetCellStartX(cellPos);
 	int cellStartY = GetCellStartY(cellPos);
 	int size = UI.CellSize;
 	Color cellColor = UI.CellColor_Path;
 
-	switch(state)
+	// Override for start/end only during PENDING or VISITED
+	if (isStart && (state == PENDING || state == VISITED)) 
 	{
-	case PATH:
-		cellColor = UI.CellColor_Path;
-		break;
-	case WALL:
-		cellColor = UI.CellColor_Wall;
-		break;
-	case START:
 		cellColor = UI.CellColor_Start;
-		break;
-	case END:
+	}
+	else if (isEnd && (state == PENDING || state == VISITED)) 
+	{
 		cellColor = UI.CellColor_End;
-		break;
-	case PENDING:
-		cellColor = UI.CellColor_Pending;
-		break;
-	case VISITED:
-		cellColor = UI.CellColor_Visited;
-		break;
-	case FINAL_PATH:
-		cellColor = UI.CellColor_Final;
-		break;
+	}
+	else 
+	{
+		switch (state) 
+		{
+		case PATH: cellColor = UI.CellColor_Path; break;
+		case WALL: cellColor = UI.CellColor_Wall; break;
+		case START: cellColor = UI.CellColor_Start; break;
+		case END: cellColor = UI.CellColor_End; break;
+		case PENDING: cellColor = UI.CellColor_Pending; break;
+		case VISITED: cellColor = UI.CellColor_Visited; break;
+		case FINAL_PATH: cellColor = UI.CellColor_Final; break;
+		}
 	}
 
-	Rectangle rect = { cellStartX, cellStartY, size, size };
+	Rectangle rect = { (float)cellStartX, (float)cellStartY, (float)size, (float)size };
 
 	DrawRectangleRounded(rect, 0.2f, 6, cellColor);
 	DrawRectangleRoundedLines(rect, 0.2f, 6, BLACK);

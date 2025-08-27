@@ -77,7 +77,7 @@ void Dijkstra::AddNeighbours(priority_queue<Cell*>& frontier, Cell* cell, vector
             next->SetParentCell(current);
             frontier.push(next);
             BeginDrawing();
-            pOut->DrawCell(cell->GetCellPosition(), PENDING); // Draw pending cell
+            pOut->DrawCell(next->GetCellPosition(), PENDING); // Draw pending cell
             EndDrawing();
             WaitTime(0.01); // 10ms delay for visualization
         }

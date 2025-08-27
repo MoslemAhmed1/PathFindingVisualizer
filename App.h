@@ -20,6 +20,9 @@ class App
 
 	vector<Button*> buttons;
 
+	bool waitingForCell; // Flag to indicate waiting for cell selection
+	ActionType pendingAction; // Store the action waiting for a cell click
+
 public:
 
 	App();  // Constructor: where the Input, Ouput and Grid are allocated
@@ -27,15 +30,11 @@ public:
 
 	void Run();
 
-	// ========== Interface Management Functions ==========
-
-	Grid* GetGrid() const;    // Returns pointer to the Grid
-
-	void UpdateInterface() const;
-
 	// ========== Action-Related Functions ==========
 
 	void ExecuteAction(ActionType ActType);  // Creates an action of the passed actionType and executes it
+	void ExecGridAction(ActionType ActType, CellPosition position); // New method for grid actions
+	
 	// To execute an action :
 	// 1- Get the ActionType
 	// 2- Read its parameters
@@ -47,4 +46,6 @@ public:
 	void Run_BFS();
 	void Run_Dijkstra();
 	void Run_AStar();
+
+
 };

@@ -23,6 +23,10 @@ App::App()
 	pOut = new Output(buttons);
 	pIn = pOut->CreateInput(buttons);
 	pGrid = new Grid(pIn, pOut);
+
+	// Initialize Flags
+	waitingForCell = false;
+	pendingAction = EMPTY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -40,18 +44,32 @@ App::~App()
 
 void App::Run()
 {
-	while (!WindowShouldClose())
+	while (!WindowShouldClose()) 
 	{
-		
+		// Render UI every frame
 		BeginDrawing();
-		pGrid->UpdateInterface(); // Always redraw the grid
+		ClearBackground(RAYWHITE);
+		pOut->CreateToolBar();
+		pGrid->UpdateInterface();
+		pOut->ClearStatusBar();
+		pOut->PrintMessage(pGrid->GetMessage());
 		EndDrawing();
-		
-		// Check for input without blocking
+
+		// Handle input
 		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
 		{
-			ActionType actType = pIn->GetUserAction();
-			ExecuteAction(actType);
+			if (waitingForCell)
+			{
+				CellPosition position = pIn->GetCellClicked();
+				ExecGridAction(pendingAction, position);
+				waitingForCell = false; // Reset flag
+				pendingAction = EMPTY;
+			}
+			else 
+			{
+				ActionType actType = pIn->GetUserAction();
+				ExecuteAction(actType);
+			}
 		}
 	}
 
@@ -59,24 +77,9 @@ void App::Run()
 }
 
 //==================================================================================//
-//								Interface Management Functions						//
-//==================================================================================//
-
-Grid* App::GetGrid() const
-{
-	return pGrid;
-}
-
-void App::UpdateInterface() const
-{
-	pGrid->UpdateInterface();
-}
-
-//==================================================================================//
 //								Actions Related Functions							//
 //==================================================================================//
 
-// Creates an action and executes it
 void App::ExecuteAction(ActionType ActType)
 {
 	// According to Action Type, create the corresponding action object
@@ -101,6 +104,7 @@ void App::ExecuteAction(ActionType ActType)
 	case RUN_BFS:
 		Run_BFS();
 		break;
+
 	case RUN_DIJKSTRA:
 		Run_Dijkstra();
 		break;
@@ -109,20 +113,38 @@ void App::ExecuteAction(ActionType ActType)
 		Run_AStar();
 		break;
 
-	case STATUS:	// a click on the status bar ==> no action
+	case STATUS:
+	case EMPTY:
 		return;
 	}
 }
 
-void App::AddStart()
+void App::ExecGridAction(ActionType ActType, CellPosition position)
 {
-	pGrid->PrintMessage("Click on a cell to add a start node");
-	CellPosition position = pIn->GetCellClicked();
 	if (position.IsValidCell()) 
 	{
-		if (!pGrid->SetStartCell(position.VCell(), position.HCell())) 
+		switch (ActType) 
 		{
-			pGrid->PrintMessage("There's already a start node, click on it to remove it!");
+		case ADD_START:
+			if (!pGrid->SetStartCell(position.VCell(), position.HCell())) 
+			{
+				pGrid->PrintMessage("There's already a start node, click on it to remove it!");
+			}
+			break;
+		case ADD_END:
+			if (!pGrid->SetEndCell(position.VCell(), position.HCell())) 
+			{
+				pGrid->PrintMessage("There's already an end node, click on it to remove it!");
+			}
+			break;
+		case ADD_WALL:
+			if (!pGrid->SetWallCell(position.VCell(), position.HCell())) 
+			{
+				pGrid->PrintMessage("Can't select start/end nodes!");
+			}
+			break;
+		default:
+			break;
 		}
 	}
 	else 
@@ -131,38 +153,25 @@ void App::AddStart()
 	}
 }
 
+void App::AddStart()
+{
+	pGrid->PrintMessage("Click on a cell to add a start node");
+	waitingForCell = true;
+	pendingAction = ADD_START;
+}
+
 void App::AddEnd()
 {
 	pGrid->PrintMessage("Click on a cell to add an end node");
-	CellPosition position = pIn->GetCellClicked();
-	if (position.IsValidCell())
-	{
-		if (!pGrid->SetEndCell(position.VCell(), position.HCell()))
-		{
-			pGrid->PrintMessage("There's already an end node, click on it to remove it!");
-		}
-	}
-	else
-	{
-		pGrid->PrintMessage("Invalid cell clicked!");
-	}
+	waitingForCell = true;
+	pendingAction = ADD_END;
 }
 
 void App::AddWall()
 {
 	pGrid->PrintMessage("Click on a cell to add a wall");
-	CellPosition position = pIn->GetCellClicked();
-	if (position.IsValidCell())
-	{
-		if (!pGrid->SetWallCell(position.VCell(), position.HCell()))
-		{
-			pGrid->PrintMessage("Can't select start/end nodes!");
-		}
-	}
-	else
-	{
-		pGrid->PrintMessage("Invalid cell clicked!");
-	}
+	waitingForCell = true;
+	pendingAction = ADD_WALL;
 }
 
 void App::ClearGrid()

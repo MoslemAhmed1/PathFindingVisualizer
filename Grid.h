@@ -23,6 +23,8 @@ class Grid
 	Cell* start;
 	Cell* end;
 
+	string msg;
+
 public:
 
 	Grid(Input* pIn, Output* pOut);		// Gives the Grid a Pointer to the Output Object and the Input Object
@@ -47,6 +49,8 @@ public:
 
 	Cell* GetStartCell() const;
 	Cell* GetEndCell() const;
+
+	string GetMessage() const;
 
 // ========= User Interface Functions ========= //
 

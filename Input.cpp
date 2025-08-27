@@ -11,18 +11,33 @@ Input::Input(vector<Button*>& buttons) : buttons(buttons)
 
 }
 
-void Input::GetPointClicked(int& x, int& y) const
+void Input::GetPointClicked(int& x, int& y) const 
 {
-	while (!WindowShouldClose())
+	while (!WindowShouldClose()) 
 	{
-		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
 		{
 			x = GetMouseX();
 			y = GetMouseY();
 			return;
 		}
+
+		// Yield to prevent CPU hogging
+		WaitTime(0.01); // Small delay to avoid busy-waiting
 	}
 }
+
+/*
+void Input::GetPointClicked(int& x, int& y) const
+{
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+	{
+		x = GetMouseX();
+		y = GetMouseY();
+		return;
+	}
+}
+*/
 
 //======================================================================================//
 //								Program  Functions								        //
@@ -32,6 +47,7 @@ ActionType Input::GetUserAction() const
 {
 	int x, y;
 	GetPointClicked(x, y);
+	cout << "X: " << x << ", Y: " << y << endl;
 	Vector2 mousePos = { (float)x, (float)y };
 	ButtonType type = NONE;
 
@@ -90,6 +106,7 @@ CellPosition Input::GetCellClicked() const
 {
 	int x, y;
 	GetPointClicked(x, y);
+	cout << "X: " << x << ", Y: " << y << endl;
 	CellPosition cellPos;
 
 	if ((y >= UI.ToolBarHeight && y <= (UI.height - UI.StatusBarHeight)) && (x >= UI.LeftMargin && x <= (UI.width - UI.LeftMargin)))

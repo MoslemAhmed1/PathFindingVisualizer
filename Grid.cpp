@@ -18,6 +18,8 @@ Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn,
 
     start = nullptr;
     end = nullptr;
+
+    msg = "";
 }
 
 // ========= Common Algorithm Functions =========
@@ -61,13 +63,17 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
     // Copy of Grid
     vector<vector<Cell*>> displayGrid = grid;
 
-    // Mark the path cells
-    for (Cell* cell : path)
-    {
+    // Animate the path highlighting
+    for (Cell* cell : path) {
         displayGrid[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()]->SetCellState(FINAL_PATH);
-        pOut->DrawCell(cell->GetCellPosition(), VISITED); // Draw visited cell
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        pOut->CreateToolBar();
+        UpdateInterface(); // Redraws all cells with overrides
+        pOut->ClearStatusBar();
+        pOut->PrintMessage(GetMessage());
         EndDrawing();
-        WaitTime(0.01); // 10ms delay for visualization
+        WaitTime(0.01);
     }
 
 }
@@ -150,34 +156,37 @@ Cell* Grid::GetStartCell() const
 }
 
 Cell* Grid::GetEndCell() const 
-{ 
+{
     return end; 
+}
+
+string Grid::GetMessage() const
+{
+    return msg;
 }
 
 // ========= User Interface Functions =========
 void Grid::UpdateInterface() const
 {
-    for (int row = 0; row < NumVerticalCells; row++)
+    for (int row = 0; row < NumVerticalCells; row++) 
     {
-        for (int col = 0; col < NumHorizontalCells; col++)
+        for (int col = 0; col < NumHorizontalCells; col++) 
         {
-            grid[row][col]->DrawCell(pOut);
+            Cell* cell = grid[row][col];
+            bool isS = (cell == start);
+            bool isE = (cell == end);
+            pOut->DrawCell(cell->GetCellPosition(), cell->GetCellState(), isS, isE);
         }
     }
 }
 
-
 void Grid::PrintMessage(string msg)
 {
+    this->msg = msg;
 	pOut->PrintMessage(msg);
-	int x, y;
-	pIn->GetPointClicked(x, y);
-	pOut->ClearStatusBar();
 }
 
-
 // ===================== Additional Functions ===================== //
-
 
 void Grid::ClearGrid()
 {
@@ -192,6 +201,9 @@ void Grid::ClearGrid()
             grid[currRow][currColumn]->Set_H_Cost(0);
 		}
 	}
+
+    start = nullptr;
+    end = nullptr;
 }
 
 

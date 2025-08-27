@@ -3,11 +3,13 @@
 
 // This file contains some global constants and definitions to be used in the project.
 #include "UI_Info.h"
+#include "CellPosition.h"
 #include <iostream>
 #include <algorithm>
 #include <vector>
 #include <queue>
 #include <cmath>
+#include <string>
 using namespace std;
 
 enum ChosenAlgorithm
