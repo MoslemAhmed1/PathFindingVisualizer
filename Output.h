@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DEFS.h"
 #include "Button.h"
 
 // forward declarations (their includes are in the cpp)
@@ -12,6 +11,10 @@ class Output	// The application manager & grid should have a pointer to this cla
 private:
 
 	vector<Button*> buttons; // Store buttons for redrawing
+
+	Texture2D icons[7];
+
+	Font font;
 
 
 	// ========== Some Utility Functions (Private Functions) ==========

@@ -23,6 +23,8 @@ class App
 	bool waitingForCell; // Flag to indicate waiting for cell selection
 	ActionType pendingAction; // Store the action waiting for a cell click
 
+	Flag currentFlag;
+
 public:
 
 	App();  // Constructor: where the Input, Ouput and Grid are allocated

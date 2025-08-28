@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <vector>
 #include <queue>
+#include <map>
 #include <cmath>
 #include <string>
 using namespace std;
@@ -55,6 +56,14 @@ enum ButtonType
 	ADD_END_BTN,
 	CLEAR_GRID_BTN,
 	NONE
+};
+
+enum Flag
+{ 
+	WaitingForCell,
+	AlgorithmRunning,
+	SettingWalls,
+	NO_CURRENT_FLAG
 };
 
 #endif

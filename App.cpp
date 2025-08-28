@@ -6,7 +6,7 @@ App::App()
 	// Spacing between buttons
 	int spacing = 10;
 	float x = 50;
-	float y = 10;
+	float y = 20;
 
 	string btn_text[7] = { "BFS", "Dijkstra", "A*", "Set Wall", "Set Start", "Set End", "Clear Grid" };
 	ButtonType type[7] = { BFS_BTN, DIJKSTRA_BTN, ASTAR_BTN, ADD_WALL_BTN, ADD_START_BTN, ADD_END_BTN, CLEAR_GRID_BTN };
@@ -27,6 +27,7 @@ App::App()
 	// Initialize Flags
 	waitingForCell = false;
 	pendingAction = EMPTY;
+	currentFlag = NO_CURRENT_FLAG;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +191,7 @@ void App::Run_BFS()
 {
 	if (pGrid->GetStartCell() && pGrid->GetEndCell()) 
 	{
-		pGrid->PrintPath(BFS_ALGORITHM);
+		pGrid->GetPath(BFS_ALGORITHM);
 	}
 	else 
 	{
@@ -202,7 +203,7 @@ void App::Run_Dijkstra()
 {
 	if (pGrid->GetStartCell() && pGrid->GetEndCell())
 	{
-		pGrid->PrintPath(DIJKSTRA_ALGORITHM);
+		pGrid->GetPath(DIJKSTRA_ALGORITHM);
 	}
 	else 
 	{
@@ -214,7 +215,7 @@ void App::Run_AStar()
 {
 	if (pGrid->GetStartCell() && pGrid->GetEndCell())
 	{
-		pGrid->PrintPath(ASTAR_ALGORITHM);
+		pGrid->GetPath(ASTAR_ALGORITHM);
 	}
 	else 
 	{

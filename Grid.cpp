@@ -33,8 +33,7 @@ void Grid::GetPath(ChosenAlgorithm algorithm)
 {
     algorithmRunning = true;
     currentAlgorithm = algorithm;
-    vector<Cell*> path;
-    switch (algorithm) 
+    switch (algorithm)
     {
     case BFS_ALGORITHM:
         bfs = new BFS(grid, start, end, pOut);
@@ -72,39 +71,7 @@ void Grid::StepAlgorithm()
     if (done) 
     {
         algorithmRunning = false;
-        vector<Cell*> path;
-        switch (currentAlgorithm) 
-        {
-        case BFS_ALGORITHM:
-            path = bfs->GetPath();
-            delete bfs;
-            bfs = nullptr;
-            break;
-        case DIJKSTRA_ALGORITHM:
-            path = dijkstra->GetPath();
-            delete dijkstra;
-            dijkstra = nullptr;
-            break;
-        case ASTAR_ALGORITHM:
-            path = astar->GetPath();
-            delete astar;
-            astar = nullptr;
-            break;
-        }
-
-        if (path.empty()) 
-        {
-            PrintMessage("No path found!");
-        }
-        else 
-        {
-            for (Cell* cell : path) 
-            {
-                if (cell == start || cell == end)
-                    continue;
-                grid[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()]->SetCellState(FINAL_PATH);
-            }
-        }
+        PrintPath(currentAlgorithm);
     }
 }
 
@@ -116,36 +83,47 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
         return;
     }
 
-    GetPath(algorithm);
-
-    /*
-    vector<Cell*> path = GetPath(algorithm);
+    vector<Cell*> path;
+    switch (currentAlgorithm)
+    {
+    case BFS_ALGORITHM:
+        path = bfs->GetPath();
+        delete bfs;
+        bfs = nullptr;
+        break;
+    case DIJKSTRA_ALGORITHM:
+        path = dijkstra->GetPath();
+        delete dijkstra;
+        dijkstra = nullptr;
+        break;
+    case ASTAR_ALGORITHM:
+        path = astar->GetPath();
+        delete astar;
+        astar = nullptr;
+        break;
+    }
 
     if (path.empty())
     {
         PrintMessage("No path found!");
-        return;
     }
-
-    // Copy of Grid
-    vector<vector<Cell*>> displayGrid = grid;
-
-    // Animate the path highlighting
-    for (Cell* cell : path)
+    else
     {
-        if (cell->GetCellState() == START || cell->GetCellState() == END)
-            continue;
-        displayGrid[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()]->SetCellState(FINAL_PATH);
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-        pOut->CreateToolBar();
-        UpdateInterface(); // Redraws all cells with overrides
-        pOut->ClearStatusBar();
-        pOut->PrintMessage(GetMessage());
-        EndDrawing();
-        WaitTime(0.01);
+        for (Cell* cell : path)
+        {
+            if (cell == start || cell == end)
+                continue;
+            grid[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()]->SetCellState(FINAL_PATH);
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+            UpdateInterface();
+            pOut->CreateToolBar();
+            pOut->ClearStatusBar();
+            PrintMessage(msg);
+            EndDrawing();
+            WaitTime(0.01);
+        }
     }
-    */
 }
 
 bool Grid::SetStartCell(int r, int c)
@@ -243,7 +221,9 @@ bool Grid::IsAlgorithmRunning() const
 // ========= User Interface Functions =========
 void Grid::UpdateInterface() const
 {
-    DrawRectangleGradientV(0, 80, 1000, 540, SKYBLUE, WHITE);
+    DrawRectangleGradientV(0, 0, 1000, 600, WHITE, SKYBLUE);
+    pOut->CreateToolBar();
+    pOut->ClearStatusBar();
 
     for (int row = 0; row < NumVerticalCells; row++) 
     {
