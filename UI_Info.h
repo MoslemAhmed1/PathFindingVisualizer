@@ -13,9 +13,10 @@ struct UI_Info	// User Interface Info.
 	int	width = 1000, height = 600,			// Window width and height
 		StatusBarHeight = 40,		// Status Bar Height
 		StatusBarWidth = 600,
-		ToolBarHeight = 80,			// Tool Bar Height (distance from top of window to bottom line of toolbar)
-		ButtonWidth = 120,
-		ButtonHeight = 40;
+		ToolBarHeight = 100;		// Tool Bar Height (distance from top of window to bottom line of toolbar)
+	
+	float ButtonWidth = 120;
+	float ButtonHeight = 40;
 
 	int CellSize = 20;				// Size of the cell
 	int CellGap = 2;				// Gap between cells

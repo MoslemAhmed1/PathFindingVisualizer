@@ -18,6 +18,7 @@ enum ChosenAlgorithm
 	BFS_ALGORITHM,
 	DIJKSTRA_ALGORITHM,
 	ASTAR_ALGORITHM,
+	GREEDY_BFS_ALGORITHM,
 	NO_CHOSEN_ALGORITHM
 };
 
@@ -30,6 +31,7 @@ enum ActionType
 	ADD_START,
 	ADD_END,
 	CLEAR_GRID,
+	RUN_GREEDY_BFS,
 
 	EMPTY,				// Empty Area in ToolBar (NOT inside any action icon)
 	GRID_AREA,			// Inside Grid Area
@@ -56,6 +58,7 @@ enum ButtonType
 	ADD_START_BTN,
 	ADD_END_BTN,
 	CLEAR_GRID_BTN,
+	GREEDY_BFS_BTN,
 	NONE
 };
 

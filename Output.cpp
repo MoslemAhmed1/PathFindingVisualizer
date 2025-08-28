@@ -18,7 +18,7 @@ Output::Output(vector<Button*>& buttons) : buttons(buttons)
 	ClearStatusBar();
 	EndDrawing();
 
-	// Initializing Font & Button Textures
+	// Initializing Button Textures (First Row)
 	icons[BFS_BTN] = LoadTexture("assets/img/BFS.png");
 	icons[DIJKSTRA_BTN] = LoadTexture("assets/img/Dijkstra.png");
 	icons[ASTAR_BTN] = LoadTexture("assets/img/Astar.png");
@@ -26,6 +26,9 @@ Output::Output(vector<Button*>& buttons) : buttons(buttons)
 	icons[ADD_END_BTN] = LoadTexture("assets/img/SetEnd.png");
 	icons[ADD_WALL_BTN] = LoadTexture("assets/img/SetWall.png");
 	icons[CLEAR_GRID_BTN] = LoadTexture("assets/img/ClearGrid.png");
+
+	// Initializing Button Textures (Second Row)
+	icons[GREEDY_BFS_BTN] = LoadTexture("assets/img/GBFS.png");
 
 	// Load Font
 	font = LoadFont("assets/fonts/Verdana-Bold.ttf");

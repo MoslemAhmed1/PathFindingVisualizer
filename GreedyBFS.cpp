@@ -1,25 +1,22 @@
-#include "Astar.h"
+#include "GreedyBFS.h"
 
-
-Astar::Astar(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut) : pOut(pOut), G(grid), start(start), end(end), done(false)
+GreedyBFS::GreedyBFS(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut) : pOut(pOut), G(grid), start(start), end(end), done(false)
 {
     for (int i = 0; i < NumVerticalCells; i++)
         for (int j = 0; j < NumHorizontalCells; j++)
             oldCost[i][j] = 1e9;
 }
 
-void Astar::Init()
+void GreedyBFS::Init()
 {
     if (!start || !end)
         return;
-    start->Set_G_Cost(0);
-    start->Set_H_Cost(heuristic(start, end));
-    start->SetTotalCost(heuristic(start, end));
+    start->SetTotalCost(0);
     start->SetCellState(PENDING);
     frontier.push(start);
 }
 
-bool Astar::Step()
+bool GreedyBFS::Step()
 {
     if (done || frontier.empty())
         return true;
@@ -42,12 +39,12 @@ bool Astar::Step()
     return false;
 }
 
-vector<Cell*> Astar::GetPath() const
+vector<Cell*> GreedyBFS::GetPath() const
 {
     return path;
 }
 
-vector<Cell*> Astar::BuildPath(Cell* end)
+vector<Cell*> GreedyBFS::BuildPath(Cell* end)
 {
     if (!end->GetParentCell())
         return {};
@@ -63,7 +60,7 @@ vector<Cell*> Astar::BuildPath(Cell* end)
     return path;
 }
 
-double Astar::heuristic(Cell* next, Cell* end)
+double GreedyBFS::heuristic(Cell* next, Cell* end)
 {
     CellPosition nextP = next->GetCellPosition();
     CellPosition endP = end->GetCellPosition();
@@ -71,22 +68,12 @@ double Astar::heuristic(Cell* next, Cell* end)
     double dy = abs(endP.HCell() - nextP.HCell());
     return dx + dy; // Manhattan Distance for 4 direction movement
 
-    // return (dx + dy) + (sqrt(2) - 2) * min(dx, dy); (Octile Distance for 8-direction movement)
-    // return max(dx, y) + (sqrt(2) - 1) * min (dx, dy);
+    // return (dx + dy) + (sqrt(2) - 2) * min(dx, dy); // Octile Distance for 8-direction movement
+    // return max(dx, dy) + (sqrt(2) - 1) * min (dx, dy); // Recommended for 8-direction movement
     // return sqrt(pow(dx, 2) + pow(dy, 2)); // Eucledian Distance
 }
 
-double Astar::CalcDistance(double curr_distance, Cell* curr, Cell* next)
-{
-    CellPosition currP = curr->GetCellPosition();
-    CellPosition nextP = next->GetCellPosition();
-    if ((currP.HCell() == nextP.HCell()) || (currP.VCell() == nextP.VCell()))
-        return curr_distance + 1;
-    else
-        return curr_distance + sqrt(2);
-}
-
-void Astar::AddNeighbours(Cell* cell)
+void GreedyBFS::AddNeighbours(Cell* cell)
 {
     int x = cell->GetCellPosition().VCell();
     int y = cell->GetCellPosition().HCell();
@@ -122,14 +109,11 @@ void Astar::AddNeighbours(Cell* cell)
 
         Cell* next = G[nx][ny];
         CellPosition nextPos = next->GetCellPosition();
-        double newCost = CalcDistance(cell->Get_G_Cost(), cell, next);
-        double priority = newCost + heuristic(next, end);
+        double priority = heuristic(next, end);
 
         bool isEnd = (next->GetCellState() == END);
-        if (next->GetCellState() == PATH || isEnd || (next->GetCellState() == PENDING && priority < oldCost[nextPos.VCell()][nextPos.HCell()]))
+        if (next->GetCellState() == PATH || isEnd)
         {
-            next->Set_G_Cost(newCost);
-            next->Set_H_Cost(priority - newCost);
             next->SetTotalCost(priority);
             oldCost[nextPos.VCell()][nextPos.HCell()] = priority;
             next->SetParentCell(cell);

@@ -13,6 +13,7 @@ void Dijkstra::Init()
         return;
     start->Set_G_Cost(0);
     start->SetTotalCost(0); // Total Cost = G Cost
+    oldCost[start->GetCellPosition().VCell()][start->GetCellPosition().HCell()] = 0;
     frontier.push(start);
     start->SetCellState(PENDING);
 }

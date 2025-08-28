@@ -12,7 +12,7 @@ public:
 
 	string buttonText;
 	
-	Button(string text, Vector2 position, ButtonType type);
+	Button(string text, Rectangle bounds, ButtonType type);
 	
 	bool isPressed(Vector2 mousePos) const;
 

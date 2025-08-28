@@ -27,18 +27,6 @@ void Input::GetPointClicked(int& x, int& y) const
 	}
 }
 
-/*
-void Input::GetPointClicked(int& x, int& y) const
-{
-	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-	{
-		x = GetMouseX();
-		y = GetMouseY();
-		return;
-	}
-}
-*/
-
 //======================================================================================//
 //								Program  Functions								        //
 //======================================================================================//
@@ -82,6 +70,9 @@ ActionType Input::GetUserAction() const
 			break;
 		case CLEAR_GRID_BTN:
 			return CLEAR_GRID;
+			break;
+		case GREEDY_BFS_BTN:
+			return RUN_GREEDY_BFS;
 			break;
 		default:
 			return EMPTY;

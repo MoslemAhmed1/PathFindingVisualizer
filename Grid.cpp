@@ -2,6 +2,7 @@
 #include "BFS.h"
 #include "Dijkstra.h"
 #include "Astar.h"
+#include "GreedyBFS.h"
 
 Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn, pOut
 {
@@ -22,6 +23,7 @@ Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn,
     bfs = nullptr;
     dijkstra = nullptr;
     astar = nullptr;
+    greedyBFS = nullptr;
     algorithmRunning = false;
     currentAlgorithm = NO_CHOSEN_ALGORITHM;
 
@@ -48,6 +50,10 @@ void Grid::GetPath(ChosenAlgorithm algorithm)
         astar = new Astar(grid, start, end, pOut);
         astar->Init();
         break;
+    case GREEDY_BFS_ALGORITHM:
+        greedyBFS = new GreedyBFS(grid, start, end, pOut);
+        greedyBFS->Init();
+        break;
     }
 }
 
@@ -67,6 +73,9 @@ void Grid::StepAlgorithm()
         break;
     case ASTAR_ALGORITHM:
         if (astar) done = astar->Step();
+        break;
+    case GREEDY_BFS_ALGORITHM:
+        if (greedyBFS) done = greedyBFS->Step();
         break;
     }
     if (done) 
@@ -101,6 +110,11 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
         path = astar->GetPath();
         delete astar;
         astar = nullptr;
+        break;
+    case GREEDY_BFS_ALGORITHM:
+        path = greedyBFS->GetPath();
+        delete greedyBFS;
+        greedyBFS = nullptr;
         break;
     }
 
@@ -312,4 +326,5 @@ Grid::~Grid()
     if (bfs) delete bfs;
     if (dijkstra) delete dijkstra;
     if (astar) delete astar;
+    if (greedyBFS) delete greedyBFS;
 }

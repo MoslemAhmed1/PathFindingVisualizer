@@ -46,6 +46,9 @@
     <ClCompile Include="Button.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GreedyBFS.cpp">
+      <Filter>Algorithms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BFS.h">
@@ -85,5 +88,8 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="APP_Info.h" />
+    <ClInclude Include="GreedyBFS.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

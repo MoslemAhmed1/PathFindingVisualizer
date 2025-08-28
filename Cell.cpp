@@ -93,12 +93,12 @@ bool Cell::operator!=(const Cell& other) const
 {
 	return !(this->position == other.position);
 }
-
+/*
 bool Cell::operator < (const Cell& other) const
 {
 	return this->totalCost < other.totalCost; 
 }
-
+*/
 Cell& Cell::operator=(const Cell& other)
 {
 	this->position = other.position;

@@ -1,9 +1,9 @@
 #include "Button.h"
 
-Button::Button(string text, Vector2 position, ButtonType type)
+Button::Button(string text, Rectangle bounds, ButtonType type)
 {
 	buttonText = text;
-	buttonBounds = { position.x, position.y, (float) UI.ButtonWidth, (float) UI.ButtonHeight };
+	buttonBounds = bounds;
 	buttonType = type;
 }
 

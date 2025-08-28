@@ -13,6 +13,7 @@ class Cell;
 class BFS;
 class Dijkstra;
 class Astar;
+class GreedyBFS;
 
 class Grid
 {
@@ -30,6 +31,7 @@ class Grid
 	BFS* bfs;
 	Dijkstra* dijkstra;
 	Astar* astar;
+	GreedyBFS* greedyBFS;
 	bool algorithmRunning;
 
 public:

@@ -6,18 +6,25 @@ App::App()
 	// Spacing between buttons
 	int spacing = 10;
 	float x = 50;
-	float y = 20;
+	float y = 10;
 
 	string btn_text[7] = { "BFS", "Dijkstra", "A*", "Set Wall", "Set Start", "Set End", "Clear Grid" };
 	ButtonType type[7] = { BFS_BTN, DIJKSTRA_BTN, ASTAR_BTN, ADD_WALL_BTN, ADD_START_BTN, ADD_END_BTN, CLEAR_GRID_BTN };
 	
-	// Initialize buttons (Error)
+	// Initialize buttons (First Row)
 	for (int i = 0; i < 7; i++)
 	{
-		Button* button = new Button(btn_text[i], { x, y }, type[i]);
+		Button* button = new Button(btn_text[i], { x, y , UI.ButtonWidth, UI.ButtonHeight }, type[i]);
 		buttons.push_back(button);
 		x += (UI.ButtonWidth + spacing);
 	}
+
+	// Initialize buttons (Second Row)
+	x = 50;
+	y = 60;
+	Button* button = new Button("Greedy BFS", { x, y , 160.0f, UI.ButtonHeight }, GREEDY_BFS_BTN);
+	buttons.push_back(button);
+
 
 	// Create Input, Output and Grid
 	pOut = new Output(buttons);
@@ -141,6 +148,10 @@ void App::ExecuteAction(ActionType ActType)
 		Run_AStar();
 		break;
 
+	case RUN_GREEDY_BFS:
+		Run_GreedyBFS();
+		break;
+
 	case STATUS:
 	case EMPTY:
 		return;
@@ -242,6 +253,21 @@ void App::Run_AStar()
 		pGrid->PrintMessage("Running A* Algorithm...");
 	}
 	else 
+	{
+		pGrid->PrintMessage("Set start and end points first!");
+	}
+}
+
+void App::Run_GreedyBFS()
+{
+	if (pGrid->GetStartCell() && pGrid->GetEndCell())
+	{
+		pGrid->ClearPath();
+		pGrid->GetPath(GREEDY_BFS_ALGORITHM);
+		currentFlag = ALGORITHM_RUNNING;
+		pGrid->PrintMessage("Running Greedy Best-First-Search (BFS) Algorithm...");
+	}
+	else
 	{
 		pGrid->PrintMessage("Set start and end points first!");
 	}

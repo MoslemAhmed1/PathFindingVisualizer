@@ -143,6 +143,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CellPosition.cpp" />
     <ClCompile Include="Dijkstra.cpp" />
+    <ClCompile Include="GreedyBFS.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="CellPosition.h" />
     <ClInclude Include="DEFS.h" />
     <ClInclude Include="Dijkstra.h" />
+    <ClInclude Include="GreedyBFS.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Cell.h" />

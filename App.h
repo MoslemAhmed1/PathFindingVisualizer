@@ -46,6 +46,7 @@ public:
 	void Run_BFS();
 	void Run_Dijkstra();
 	void Run_AStar();
+	void Run_GreedyBFS();
 
 
 };

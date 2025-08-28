@@ -45,9 +45,18 @@ public:
 
 	bool operator != (const Cell& other) const;
 
-	bool operator<(const Cell& other) const;
+	// bool operator<(const Cell& other) const;
 
 	Cell& operator=(const Cell& other);
 
 
+};
+
+// Comparator for min-heap based on Cell totalCost
+struct CellComparator
+{
+	bool operator()(const Cell* lhs, const Cell* rhs) const
+	{
+		return lhs->GetTotalCost() > rhs->GetTotalCost(); // Min-heap: smaller totalCost has higher priority
+	}
 };
