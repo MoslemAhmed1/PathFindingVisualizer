@@ -20,7 +20,6 @@ class App
 
 	vector<Button*> buttons;
 
-	bool waitingForCell; // Flag to indicate waiting for cell selection
 	ActionType pendingAction; // Store the action waiting for a cell click
 
 	Flag currentFlag;
@@ -44,7 +43,6 @@ public:
 	void AddStart();
 	void AddEnd();
 	void AddWall();
-	void ClearGrid();
 	void Run_BFS();
 	void Run_Dijkstra();
 	void Run_AStar();

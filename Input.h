@@ -30,4 +30,7 @@ public:
 									   	 // This function is needed only in Design Mode
 										 // If the click is NOT on a cellposition, (-1,-1) is returned
 										 // This function is like GetPointClicked but returns Cell Position NOT Real Coordinates
+
+	CellPosition GetCellClicked_F() const;
+
 };

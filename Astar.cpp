@@ -2,17 +2,21 @@
 
 
 Astar::Astar(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut) : pOut(pOut), G(grid), start(start), end(end), done(false)
-{}
+{
+    for (int i = 0; i < NumVerticalCells; i++)
+        for (int j = 0; j < NumHorizontalCells; j++)
+            oldCost[i][j] = 1e9;
+}
 
 void Astar::Init()
 {
     if (!start || !end)
         return;
-    frontier.push(start);
-    start->SetCellState(PENDING);
     start->Set_G_Cost(0);
     start->Set_H_Cost(0);
     start->SetTotalCost(0);
+    start->SetCellState(PENDING);
+    frontier.push(start);
 }
 
 bool Astar::Step()
@@ -22,6 +26,9 @@ bool Astar::Step()
 
     Cell* cell = frontier.top();
     frontier.pop();
+
+    if (cell->GetTotalCost() > oldCost[cell->GetCellPosition().VCell()][cell->GetCellPosition().HCell()])
+        return false;
 
     if (cell == end)
     {
@@ -110,19 +117,21 @@ void Astar::AddNeighbours(Cell* cell)
             (dr[i] == 1 && dc[i] == 1 && (G[x][y + 1]->GetCellState() == WALL && G[x + 1][y]->GetCellState() == WALL)) ||
             (dr[i] == 1 && dc[i] == -1 && (G[x][y - 1]->GetCellState() == WALL && G[x + 1][y]->GetCellState() == WALL)))
             continue;
-        
+
         Cell* next = G[nx][ny];
-        double newCost = CalcDistance(cell->GetTotalCost(), cell, next);
+        CellPosition nextPos = next->GetCellPosition();
+        double newCost = CalcDistance(cell->Get_G_Cost(), cell, next);
         double priority = newCost + heuristic(next, end);
 
         bool isEnd = (next->GetCellState() == END);
-        if (next->GetCellState() == PATH || isEnd || (next->GetCellState() == PENDING && newCost < next->GetTotalCost()))
+        if (next->GetCellState() == PATH || isEnd || (next->GetCellState() == PENDING && priority < oldCost[nextPos.VCell()][nextPos.HCell()]))
         {
             next->Set_G_Cost(newCost);
             next->Set_H_Cost(priority - newCost);
             next->SetTotalCost(priority);
-            G[nx][ny]->SetCellState(PENDING);
+            oldCost[nextPos.VCell()][nextPos.HCell()] = priority;
             next->SetParentCell(cell);
+            G[nx][ny]->SetCellState(PENDING);
             frontier.push(next);
         }
     }

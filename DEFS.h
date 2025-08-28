@@ -17,7 +17,8 @@ enum ChosenAlgorithm
 {
 	BFS_ALGORITHM,
 	DIJKSTRA_ALGORITHM,
-	ASTAR_ALGORITHM
+	ASTAR_ALGORITHM,
+	NO_CHOSEN_ALGORITHM
 };
 
 enum ActionType
@@ -60,9 +61,9 @@ enum ButtonType
 
 enum Flag
 { 
-	WaitingForCell,
-	AlgorithmRunning,
-	SettingWalls,
+	WAITING_FOR_CELL,
+	ALGORITHM_RUNNING,
+	SETTING_WALLS,
 	NO_CURRENT_FLAG
 };
 

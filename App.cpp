@@ -24,8 +24,7 @@ App::App()
 	pIn = pOut->CreateInput(buttons);
 	pGrid = new Grid(pIn, pOut);
 
-	// Initialize Flags
-	waitingForCell = false;
+	// Initialize Flags & Actions
 	pendingAction = EMPTY;
 	currentFlag = NO_CURRENT_FLAG;
 }
@@ -57,20 +56,42 @@ void App::Run()
 		EndDrawing();
 
 		// Step the algorithm if running
-		if (pGrid->IsAlgorithmRunning()) 
+		if (currentFlag == ALGORITHM_RUNNING) 
 		{
 			pGrid->StepAlgorithm();
+
+			if (!pGrid->IsAlgorithmRunning())
+				currentFlag = NO_CURRENT_FLAG;
+
 			WaitTime(0.01); // Control animation speed
 		}
 
 		// Handle input (only if not running algorithm, to avoid interference)
-		if (!pGrid->IsAlgorithmRunning() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+		if (currentFlag == SETTING_WALLS)
 		{
-			if (waitingForCell) 
+			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+			{
+				CellPosition position = pIn->GetCellClicked_F();
+				if (position.IsValidCell())
+				{
+					pGrid->SetWallCell(position.VCell(), position.HCell());
+					WaitTime(0.01);
+				}
+			}
+
+			if (IsKeyPressed(KEY_E))
+			{
+				currentFlag = NO_CURRENT_FLAG;
+				pGrid->PrintMessage("Wall setting mode exited");
+			}
+		}
+		else if (currentFlag != ALGORITHM_RUNNING && currentFlag != SETTING_WALLS && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+		{
+			if (currentFlag == WAITING_FOR_CELL) 
 			{
 				CellPosition position = pIn->GetCellClicked();
 				ExecGridAction(pendingAction, position);
-				waitingForCell = false;
+				currentFlag = NO_CURRENT_FLAG;
 				pendingAction = EMPTY;
 			}
 			else 
@@ -105,7 +126,7 @@ void App::ExecuteAction(ActionType ActType)
 		break;
 
 	case CLEAR_GRID:
-		ClearGrid();
+		pGrid->ClearGrid();
 		break;
 
 	case RUN_BFS:
@@ -163,35 +184,32 @@ void App::ExecGridAction(ActionType ActType, CellPosition position)
 void App::AddStart()
 {
 	pGrid->PrintMessage("Click on a cell to add a start node");
-	waitingForCell = true;
+	currentFlag = WAITING_FOR_CELL;
 	pendingAction = ADD_START;
 }
 
 void App::AddEnd()
 {
 	pGrid->PrintMessage("Click on a cell to add an end node");
-	waitingForCell = true;
+	currentFlag = WAITING_FOR_CELL;
 	pendingAction = ADD_END;
 }
 
 void App::AddWall()
 {
-	pGrid->PrintMessage("Click on a cell to add a wall");
-	waitingForCell = true;
+	pGrid->PrintMessage("Wall Setting Mode Entered. Press E to Exit the Mode");
+	currentFlag = SETTING_WALLS;
 	pendingAction = ADD_WALL;
-}
-
-void App::ClearGrid()
-{
-	pGrid->ClearGrid();
-	pOut->ClearGridArea();
 }
 
 void App::Run_BFS()
 {
 	if (pGrid->GetStartCell() && pGrid->GetEndCell()) 
 	{
+		pGrid->ClearPath();
 		pGrid->GetPath(BFS_ALGORITHM);
+		currentFlag = ALGORITHM_RUNNING;
+		pGrid->PrintMessage("Running BFS Algorithm...");
 	}
 	else 
 	{
@@ -203,7 +221,10 @@ void App::Run_Dijkstra()
 {
 	if (pGrid->GetStartCell() && pGrid->GetEndCell())
 	{
+		pGrid->ClearPath();
 		pGrid->GetPath(DIJKSTRA_ALGORITHM);
+		currentFlag = ALGORITHM_RUNNING;
+		pGrid->PrintMessage("Running Dijkstra Algorithm...");
 	}
 	else 
 	{
@@ -215,7 +236,10 @@ void App::Run_AStar()
 {
 	if (pGrid->GetStartCell() && pGrid->GetEndCell())
 	{
+		pGrid->ClearPath();
 		pGrid->GetPath(ASTAR_ALGORITHM);
+		currentFlag = ALGORITHM_RUNNING;
+		pGrid->PrintMessage("Running A* Algorithm...");
 	}
 	else 
 	{

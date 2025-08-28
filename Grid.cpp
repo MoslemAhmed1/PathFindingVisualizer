@@ -23,6 +23,7 @@ Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn,
     dijkstra = nullptr;
     astar = nullptr;
     algorithmRunning = false;
+    currentAlgorithm = NO_CHOSEN_ALGORITHM;
 
     msg = "";
 }
@@ -109,6 +110,7 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
     }
     else
     {
+        PrintMessage("Path Found!");
         for (Cell* cell : path)
         {
             if (cell == start || cell == end)
@@ -117,8 +119,6 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
             BeginDrawing();
             ClearBackground(RAYWHITE);
             UpdateInterface();
-            pOut->CreateToolBar();
-            pOut->ClearStatusBar();
             PrintMessage(msg);
             EndDrawing();
             WaitTime(0.01);
@@ -261,6 +261,36 @@ void Grid::ClearGrid()
 
     start = nullptr;
     end = nullptr;
+
+    pOut->ClearGridArea();
+    msg = "";
+    pOut->ClearStatusBar();
+}
+
+void Grid::ClearPath()
+{
+    for (int currRow = 0; currRow < NumVerticalCells; currRow++)
+    {
+        for (int currColumn = 0; currColumn < NumHorizontalCells; currColumn++)
+        {
+            Cell* cell = grid[currRow][currColumn];
+            CellState state = cell->GetCellState();
+            if (state == WALL || cell == start || cell == end)
+                continue;
+
+            grid[currRow][currColumn]->SetCellState(PATH);
+            grid[currRow][currColumn]->SetParentCell(nullptr);
+            grid[currRow][currColumn]->SetTotalCost(0);
+            grid[currRow][currColumn]->Set_G_Cost(0);
+            grid[currRow][currColumn]->Set_H_Cost(0);
+        }
+    }
+
+    start->SetCellState(START);
+    end->SetCellState(END);
+
+    msg = "";
+    pOut->ClearStatusBar();
 }
 
 

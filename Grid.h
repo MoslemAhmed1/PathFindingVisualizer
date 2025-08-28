@@ -73,6 +73,8 @@ public:
 
 	void ClearGrid();
 
+	void ClearPath();
+
 // ================================================================ //
 
 	~Grid(); // A destructor for any needed deallcations

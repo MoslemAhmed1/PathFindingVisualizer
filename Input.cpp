@@ -125,4 +125,26 @@ CellPosition Input::GetCellClicked() const
 	return cellPos;
 }
 
+CellPosition Input::GetCellClicked_F() const
+{
+	int x = GetMouseX(); // Get current mouse position (no waiting)
+	int y = GetMouseY(); // Get current mouse position
+	CellPosition cellPos;
+
+	if ((y >= UI.ToolBarHeight && y <= (UI.height - UI.StatusBarHeight)) && (x >= UI.LeftMargin && x <= (UI.width - UI.LeftMargin)))
+	{
+		cellPos.SetHCell((x - UI.LeftMargin) / UI.CellSize);
+		cellPos.SetVCell((y - UI.TopMargin - UI.ToolBarHeight) / UI.CellSize);
+
+	}
+	// If Click Not on a Cell
+	else
+	{
+		cellPos.SetHCell(-1);
+		cellPos.SetVCell(-1);
+	}
+
+	return cellPos;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////// 

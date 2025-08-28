@@ -8,7 +8,8 @@ class Astar
     vector<vector<Cell*>>& G;
     Cell* start;
     Cell* end;
-    priority_queue<Cell*> frontier;
+    priority_queue<Cell*, vector<Cell*>, greater<Cell*>> frontier;
+    float oldCost[NumVerticalCells][NumHorizontalCells];
     bool done;
     vector<Cell*> path;
 
@@ -18,7 +19,6 @@ public:
     void Init();
     bool Step(); // Process one node, return true if done
     vector<Cell*> GetPath() const;
-    bool IsDone() const;
 
 private:
 

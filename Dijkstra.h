@@ -7,7 +7,8 @@ class Dijkstra
     vector<vector<Cell*>>& G;
     Cell* start;
     Cell* end;
-    priority_queue<Cell*> frontier;
+    priority_queue<Cell*, vector<Cell*>, greater<Cell*>> frontier; // Min-heap
+    float oldCost[NumVerticalCells][NumHorizontalCells];
     bool done;
     vector<Cell*> path;
 
@@ -16,8 +17,7 @@ public:
     Dijkstra(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut);
     void Init();
     bool Step(); // Process one node, return true if done
-    vector<Cell*> GetPath() const;
-    bool IsDone() const;
+    vector<Cell*> GetPath() const;;
 
 private:
 
