@@ -1,8 +1,7 @@
 #include "DFS.h"
 
-DFS::DFS(vector<vector<Cell*>>& grid, Output* pOut) : pOut(pOut), G(grid), done(false)
+DFS::DFS(vector<vector<Cell*>>& grid) : G(grid)
 {
-    startingCell = nullptr;
     for (int i = 0; i < G.size(); i++)
         for (int j = 0; j < G[0].size(); j++)
             if (i % 2 == 0 || j % 2 == 0)
@@ -28,17 +27,12 @@ void DFS::Init()
 
 bool DFS::Step()
 {
-    if (done || mazeStack.empty())
+    if (mazeStack.empty())
         return true;
 
     AddRandomNeighbour(mazeStack.top());
 
     return false;
-}
-
-bool DFS::IsDone() const
-{
-    return done;
 }
 
 bool DFS::isBlocked(Cell* cell)
@@ -70,14 +64,14 @@ vector<Cell*> DFS::GetUnvisitedNeighbors(Cell* cell)
 
 void DFS::AddRandomNeighbour(Cell* cell)
 {
-    // Pop blocked cells from top of stack
+    // Pop blocked cells from top of stack (Backtracking)
     while (!mazeStack.empty() && isBlocked(mazeStack.top())) 
         mazeStack.pop();
 
     if (mazeStack.empty()) 
-        return;  // Done
+        return;  // done
 
-    // Now top (cell) has unvisited neighbors
+    // top (cell) has unvisited neighbors
     cell = mazeStack.top();
 
     // Get and shuffle unvisited neighbors
@@ -93,14 +87,14 @@ void DFS::AddRandomNeighbour(Cell* cell)
     int nxW = cell->GetCellPosition().VCell() + dx / 2;
     int nyW = cell->GetCellPosition().HCell() + dy / 2;
 
-    
-    G[nxW][nyW]->SetCellState(VISITED);  // remove wall
-    neighbour->SetCellState(VISITED);   // mark unvisited neighbour
+    G[nxW][nyW]->SetCellState(VISITED);  // convert wall to path
+    neighbour->SetCellState(VISITED);   // mark unvisited neighbour as visited
     mazeStack.push(neighbour);
 }
 
 /*
-
+NOTE : This was the original function which was then broken down
+        into 2 functions : Init() and Step().
 
 void DFS::Algorithm()
 {
@@ -110,7 +104,7 @@ void DFS::Algorithm()
     // 3- Keep repeating [2.] till reaching a blocked path (All neighbours are visited)
     // 4- If reached a blocked path, backtrack till finding a cell with an unvisited neighbour.
 
-    // Step 1 : Initialization
+    // Step 1 : Initialization, this is converted to Init() function
     int r, c;
     random_device rd;
     mt19937 gen(rd());
@@ -126,7 +120,7 @@ void DFS::Algorithm()
     G[r][c]->SetCellState(VISITED);
     mazeStack.push(G[r][c]);
 
-    // Step 2 : Add Random Unvisited Neighbour
+    // Step 2 : Add Random Unvisited Neighbour, this is converted to Step() function
     while (!mazeStack.empty())
     {
         AddRandomNeighbour(mazeStack.top());

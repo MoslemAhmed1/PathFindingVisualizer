@@ -1,6 +1,6 @@
 #include "BFS.h"
 
-BFS::BFS(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut) : pOut(pOut), G(grid), start(start), end(end), done(false) 
+BFS::BFS(vector<vector<Cell*>>& grid, Cell* start, Cell* end) : G(grid), start(start), end(end)
 {}
 
 void BFS::Init() 
@@ -13,7 +13,7 @@ void BFS::Init()
 
 bool BFS::Step() 
 {
-    if (done || frontier.empty()) 
+    if (frontier.empty()) 
         return true;
 
     Cell* cell = frontier.front();
@@ -22,7 +22,6 @@ bool BFS::Step()
     if (cell == end) 
     {
         path = BuildPath(end);
-        done = true;
         return true;
     }
 
@@ -34,11 +33,6 @@ bool BFS::Step()
 vector<Cell*> BFS::GetPath() const 
 {
     return path;
-}
-
-bool BFS::IsDone() const 
-{
-    return done;
 }
 
 vector<Cell*> BFS::BuildPath(Cell* end) 

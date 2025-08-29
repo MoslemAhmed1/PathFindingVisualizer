@@ -44,16 +44,6 @@ void Cell::SetCellState(CellState newState)
 	state = newState;
 }
 
-CellPosition Cell::GetCellPosition() const
-{
-	return position;
-}
-
-CellState Cell::GetCellState() const
-{
-	return state;
-}
-
 double Cell::Get_G_Cost() const
 {
 	return gCost;
@@ -74,13 +64,15 @@ Cell* Cell::GetParentCell() const
 	return parent;
 }
 
-// ======= Drawing Functions ======= 
-
-void Cell::DrawCell(Output* pOut) const
+CellState Cell::GetCellState() const
 {
-	pOut->DrawCell(position, state);
+	return state;
 }
 
+CellPosition Cell::GetCellPosition() const
+{
+	return position;
+}
 
 // ======= Overloading Operators =======
 
@@ -93,12 +85,7 @@ bool Cell::operator!=(const Cell& other) const
 {
 	return !(this->position == other.position);
 }
-/*
-bool Cell::operator < (const Cell& other) const
-{
-	return this->totalCost < other.totalCost; 
-}
-*/
+
 Cell& Cell::operator=(const Cell& other)
 {
 	this->position = other.position;

@@ -2,17 +2,16 @@
 
 #include "Output.h"
 
-//======================================================================================//
-//								General Functions									    //
-//======================================================================================//
+//////////////////////////////////////////////////////////////////////////////////////////
 
 Input::Input(vector<Button*>& buttons) : buttons(buttons)
-{
+{}
 
-}
+//////////////////////////////////////////////////////////////////////////////////////////
 
 void Input::GetPointClicked(int& x, int& y) const 
 {
+	// Keeps looping until it receives a mouse click
 	while (!WindowShouldClose()) 
 	{
 		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
@@ -22,20 +21,60 @@ void Input::GetPointClicked(int& x, int& y) const
 			return;
 		}
 
-		// Yield to prevent CPU hogging
-		WaitTime(0.01); // Small delay to avoid busy-waiting
+		WaitTime(0.01);
 	}
 }
 
-//======================================================================================//
-//								Program  Functions								        //
-//======================================================================================//
+////////////////////////////////////////////////////////////////////////////////////////// 
+
+CellPosition Input::GetCellClicked() const
+{
+	int x, y;
+	GetPointClicked(x, y);
+	CellPosition cellPos;
+
+	if ((y >= UI.ToolBarHeight && y <= (UI.height - UI.StatusBarHeight)) && (x >= UI.LeftMargin && x <= (UI.width - UI.LeftMargin)))
+	{
+		cellPos.SetHCell((x - UI.LeftMargin) / UI.CellSize);
+		cellPos.SetVCell((y - UI.TopMargin - UI.ToolBarHeight) / UI.CellSize);
+	}
+	else // If Click Not on a Cell
+	{
+		cellPos.SetHCell(-1);
+		cellPos.SetVCell(-1);
+	}
+
+	return cellPos;
+}
+
+CellPosition Input::GetCellClicked_F() const
+{
+	// Get current mouse position (no waiting for clicks)
+	int x = GetMouseX(); 
+	int y = GetMouseY(); 
+	CellPosition cellPos;
+
+	if ((y >= UI.ToolBarHeight && y <= (UI.height - UI.StatusBarHeight)) && (x >= UI.LeftMargin && x <= (UI.width - UI.LeftMargin)))
+	{
+		cellPos.SetHCell((x - UI.LeftMargin) / UI.CellSize);
+		cellPos.SetVCell((y - UI.TopMargin - UI.ToolBarHeight) / UI.CellSize);
+
+	}
+	else // If Click Not on a Cell
+	{
+		cellPos.SetHCell(-1);
+		cellPos.SetVCell(-1);
+	}
+
+	return cellPos;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////// 
 
 ActionType Input::GetUserAction() const
 {
 	int x, y;
 	GetPointClicked(x, y);
-	cout << "X: " << x << ", Y: " << y << endl;
 	Vector2 mousePos = { (float)x, (float)y };
 	ButtonType type = NONE;
 
@@ -91,54 +130,4 @@ ActionType Input::GetUserAction() const
 
 	// [3] User clicks on the status bar
 	return STATUS;
-
 }
-
-////////////////////////////////////////////////////////////////////////////////////////// 
-
-CellPosition Input::GetCellClicked() const
-{
-	int x, y;
-	GetPointClicked(x, y);
-	cout << "X: " << x << ", Y: " << y << endl;
-	CellPosition cellPos;
-
-	if ((y >= UI.ToolBarHeight && y <= (UI.height - UI.StatusBarHeight)) && (x >= UI.LeftMargin && x <= (UI.width - UI.LeftMargin)))
-	{
-		cellPos.SetHCell((x - UI.LeftMargin) / UI.CellSize);
-		cellPos.SetVCell((y - UI.TopMargin - UI.ToolBarHeight) / UI.CellSize);
-
-	}
-	// If Click Not on a Cell
-	else
-	{
-		cellPos.SetHCell(-1);
-		cellPos.SetVCell(-1);
-	}
-
-	return cellPos;
-}
-
-CellPosition Input::GetCellClicked_F() const
-{
-	int x = GetMouseX(); // Get current mouse position (no waiting)
-	int y = GetMouseY(); // Get current mouse position
-	CellPosition cellPos;
-
-	if ((y >= UI.ToolBarHeight && y <= (UI.height - UI.StatusBarHeight)) && (x >= UI.LeftMargin && x <= (UI.width - UI.LeftMargin)))
-	{
-		cellPos.SetHCell((x - UI.LeftMargin) / UI.CellSize);
-		cellPos.SetVCell((y - UI.TopMargin - UI.ToolBarHeight) / UI.CellSize);
-
-	}
-	// If Click Not on a Cell
-	else
-	{
-		cellPos.SetHCell(-1);
-		cellPos.SetVCell(-1);
-	}
-
-	return cellPos;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////// 

@@ -1,10 +1,9 @@
 #include "Prim.h"
 
-Prim::Prim(vector<vector<Cell*>>& grid, Output* pOut) : pOut(pOut), G(grid)
+Prim::Prim(vector<vector<Cell*>>& grid) : G(grid)
 {
     isProcessed.resize(grid.size(), vector<bool>(grid[0].size(), 0));
 
-    // Grid is initially all PATH
     for (int i = 0; i < G.size(); i++)
         for (int j = 0; j < G[0].size(); j++)
             if (i % 2 == 0 || j % 2 == 0)
@@ -61,8 +60,8 @@ void Prim::ConnectNeighbour()
 
     if (valid)
     {
-        wall->SetCellState(VISITED);  // Remove wall
-        G[nx][ny]->SetCellState(VISITED);  // Visit neighbor
+        wall->SetCellState(VISITED);       // Convert Wall to Path
+        G[nx][ny]->SetCellState(VISITED);  // Mark Neighbor as Visited
         AddAdjacentWalls(G[nx][ny]);
     }
 
@@ -93,6 +92,11 @@ void Prim::AddAdjacentWalls(Cell* cell)
 }
 
 /*
+
+NOTE : This was the original function which was then broken down
+        into 2 functions : Init() and Step().
+
+
 void Prim::Algorithm()
 {
     // Note : PATHS = Odd Coordinates , WALLS = Even Coordinates
@@ -102,7 +106,7 @@ void Prim::Algorithm()
     //      else remove it from the list (keep it as wall)
     // 3- Keep repeating [2.] till all cells are visited (All neighbours are visited)
 
-    // Step 1 : Initialization
+    // Step 1 : Initialization, this is converted to Init() function
     int r, c;
     random_device rd;
     mt19937 gen(rd());
@@ -118,11 +122,10 @@ void Prim::Algorithm()
     AddAdjacentWalls(G[r][c]);
 
 
-    // Step 2 : Add Random Unvisited Neighbour
+    // Step 2 : Add Random Unvisited Neighbour, this is converted to Step() function
     while (!wallList.empty())
     {
         ConnectNeighbour();
     }
-
 }
 */

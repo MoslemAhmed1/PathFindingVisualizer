@@ -1,6 +1,6 @@
 #include "Dijkstra.h"
 
-Dijkstra::Dijkstra(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut) : pOut(pOut), G(grid), start(start), end(end), done(false)
+Dijkstra::Dijkstra(vector<vector<Cell*>>& grid, Cell* start, Cell* end) : G(grid), start(start), end(end)
 {
     for (int i = 0; i < NumVerticalCells; i++)
         for (int j = 0; j < NumHorizontalCells; j++)
@@ -12,7 +12,7 @@ void Dijkstra::Init()
     if (!start || !end)
         return;
     start->Set_G_Cost(0);
-    start->SetTotalCost(0); // Total Cost = G Cost
+    start->SetTotalCost(0); // TotalCost == G Cost
     oldCost[start->GetCellPosition().VCell()][start->GetCellPosition().HCell()] = 0;
     frontier.push(start);
     start->SetCellState(PENDING);
@@ -20,7 +20,7 @@ void Dijkstra::Init()
 
 bool Dijkstra::Step()
 {
-    if (done || frontier.empty())
+    if (frontier.empty())
         return true;
 
     Cell* cell = frontier.top();
@@ -32,7 +32,6 @@ bool Dijkstra::Step()
     if (cell == end)
     {
         path = BuildPath(end);
-        done = true;
         return true;
     }
 

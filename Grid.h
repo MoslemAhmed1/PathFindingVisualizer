@@ -5,8 +5,6 @@
 
 #include "Input.h"
 #include "Output.h"
-#include <fstream>
-
 
 // forward declarations (the includes are in the cpp)
 class Cell;
@@ -22,21 +20,26 @@ class Grid
 	Output* pOut;   
 	Input* pIn;     
 
-	vector<vector<Cell*>> grid;		// An array of "Pointers" to All Cells of the Grid Cells
+	vector<vector<Cell*>> grid;	// An array of "Pointers" to All Cells of the Grid Cells
 	
 	Cell* start;
 	Cell* end;
 
-	string msg;
+	string msg;	// Stores the last message printed
 
+	// Algorithm Control Flags
 	ChosenAlgorithm currentAlgorithm;
+	bool algorithmRunning;
+
+	// Shortest Path Algorithms
 	BFS* bfs;
 	Dijkstra* dijkstra;
 	Astar* astar;
 	GreedyBFS* greedyBFS;
+
+	// Maze Generation Algorithms
 	DFS* dfs;
 	Prim* prim;
-	bool algorithmRunning;
 
 public:
 
@@ -45,24 +48,22 @@ public:
 
 // ========= Common Algorithm Functions ========= //
 
-	void GetPath(ChosenAlgorithm algorithm);
-
 	void StepAlgorithm();
+
+	void GetPath(ChosenAlgorithm algorithm);
 
 	void PrintPath(ChosenAlgorithm algorithm);
 
 	void GenerateMaze(MazeAlgorithm algorithm);
 
-// ========= Others ========= //
+// ========= Setters and Getters Functions ========= //
 
 	bool SetStartCell(int r, int c);
 	bool SetEndCell(int r, int c);
 	bool SetWallCell(int r, int c);
 
-// ========= Setters and Getters Functions ========= //
-
-	Input* GetInput() const;	// Gets a Pointer to the Input
-	Output* GetOutput() const; // Gets a Pointer to the Output 
+	Input* GetInput() const;
+	Output* GetOutput() const;
 
 	Cell* GetStartCell() const;
 	Cell* GetEndCell() const;
@@ -85,5 +86,5 @@ public:
 
 // ================================================================ //
 
-	~Grid(); // A destructor for any needed deallcations
+	~Grid();
 };

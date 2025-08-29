@@ -1,7 +1,7 @@
 #include "Astar.h"
 
 
-Astar::Astar(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut) : pOut(pOut), G(grid), start(start), end(end), done(false)
+Astar::Astar(vector<vector<Cell*>>& grid, Cell* start, Cell* end) : G(grid), start(start), end(end)
 {
     for (int i = 0; i < NumVerticalCells; i++)
         for (int j = 0; j < NumHorizontalCells; j++)
@@ -21,7 +21,7 @@ void Astar::Init()
 
 bool Astar::Step()
 {
-    if (done || frontier.empty())
+    if (frontier.empty())
         return true;
 
     Cell* cell = frontier.top();
@@ -33,7 +33,6 @@ bool Astar::Step()
     if (cell == end)
     {
         path = BuildPath(end);
-        done = true;
         return true;
     }
 
@@ -72,7 +71,7 @@ double Astar::heuristic(Cell* next, Cell* end)
     return dx + dy; // Manhattan Distance for 4 direction movement
 
     // return (dx + dy) + (sqrt(2) - 2) * min(dx, dy); (Octile Distance for 8-direction movement)
-    // return max(dx, y) + (sqrt(2) - 1) * min (dx, dy);
+    // return max(dx, y) + (sqrt(2) - 1) * min (dx, dy); (can't remember)
     // return sqrt(pow(dx, 2) + pow(dy, 2)); // Eucledian Distance
 }
 

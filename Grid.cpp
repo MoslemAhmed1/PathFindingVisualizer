@@ -6,7 +6,7 @@
 #include "DFS.h"
 #include "Prim.h"
 
-Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn, pOut
+Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut)
 {
     grid.resize(NumVerticalCells, vector<Cell*>(NumHorizontalCells));
 
@@ -28,13 +28,14 @@ Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn,
     greedyBFS = nullptr;
     dfs = nullptr;
     prim = nullptr;
+
     algorithmRunning = false;
     currentAlgorithm = NO_CHOSEN_ALGORITHM;
 
     msg = "";
 }
 
-// ========= Common Algorithm Functions =========
+// ========= Common Algorithm Functions ========= //
 
 void Grid::GetPath(ChosenAlgorithm algorithm) 
 {
@@ -43,19 +44,19 @@ void Grid::GetPath(ChosenAlgorithm algorithm)
     switch (algorithm)
     {
     case BFS_ALGORITHM:
-        bfs = new BFS(grid, start, end, pOut);
+        bfs = new BFS(grid, start, end);
         bfs->Init();
         break;
     case DIJKSTRA_ALGORITHM:
-        dijkstra = new Dijkstra(grid, start, end, pOut);
+        dijkstra = new Dijkstra(grid, start, end);
         dijkstra->Init();
         break;
     case ASTAR_ALGORITHM:
-        astar = new Astar(grid, start, end, pOut);
+        astar = new Astar(grid, start, end);
         astar->Init();
         break;
     case GREEDY_BFS_ALGORITHM:
-        greedyBFS = new GreedyBFS(grid, start, end, pOut);
+        greedyBFS = new GreedyBFS(grid, start, end);
         greedyBFS->Init();
         break;
     }
@@ -93,8 +94,6 @@ void Grid::StepAlgorithm()
         {
             ClearPath();
             PrintMessage("Maze Generated!");
-            // if (prim) prim = nullptr;
-            // if (dfs) dfs = nullptr;
             return;
         }
         PrintPath(currentAlgorithm);
@@ -159,11 +158,13 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
 void Grid::GenerateMaze(MazeAlgorithm algorithm)
 {
     // Reset previous algorithm pointers
-    if (prim) {
+    if (prim) 
+    {
         delete prim;
         prim = nullptr;
     }
-    if (dfs) {
+    if (dfs) 
+    {
         delete dfs;
         dfs = nullptr;
     }
@@ -174,15 +175,17 @@ void Grid::GenerateMaze(MazeAlgorithm algorithm)
     currentAlgorithm = GENERATE_MAZE_ALGORITHM;
     if (algorithm == PRIMS_ALGORITHM)
     {
-        prim = new Prim(grid, pOut);
+        prim = new Prim(grid);
         prim->Init();
     }
     else if (algorithm == DFS_ALGORITHM)
     {
-        dfs = new DFS(grid, pOut);
+        dfs = new DFS(grid);
         dfs->Init();
     }
 }
+
+// ========= Setters and Getters Functions ========= //
 
 bool Grid::SetStartCell(int r, int c)
 {
@@ -243,9 +246,6 @@ bool Grid::SetWallCell(int r, int c)
     return true;
 }
 
-
-// ========= Setters and Getters Functions =========
-
 Input* Grid::GetInput() const
 {
 	return pIn;
@@ -276,7 +276,7 @@ bool Grid::IsAlgorithmRunning() const
     return algorithmRunning;
 }
 
-// ========= User Interface Functions =========
+// ========= User Interface Functions ========= //
 void Grid::UpdateInterface() const
 {
     DrawRectangleGradientV(0, 0, 1000, 600, WHITE, SKYBLUE);
@@ -321,8 +321,8 @@ void Grid::ClearGrid()
     end = nullptr;
 
     pOut->ClearGridArea();
-    msg = "";
     pOut->ClearStatusBar();
+    msg = "";
 }
 
 void Grid::ClearPath()
@@ -349,8 +349,8 @@ void Grid::ClearPath()
     if(end)
         end->SetCellState(END);
 
-    msg = "";
     pOut->ClearStatusBar();
+    msg = "";
 }
 
 

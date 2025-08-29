@@ -1,6 +1,6 @@
 #include "GreedyBFS.h"
 
-GreedyBFS::GreedyBFS(vector<vector<Cell*>>& grid, Cell* start, Cell* end, Output* pOut) : pOut(pOut), G(grid), start(start), end(end), done(false)
+GreedyBFS::GreedyBFS(vector<vector<Cell*>>& grid, Cell* start, Cell* end) : G(grid), start(start), end(end)
 {
     for (int i = 0; i < NumVerticalCells; i++)
         for (int j = 0; j < NumHorizontalCells; j++)
@@ -18,7 +18,7 @@ void GreedyBFS::Init()
 
 bool GreedyBFS::Step()
 {
-    if (done || frontier.empty())
+    if (frontier.empty())
         return true;
 
     Cell* cell = frontier.top();
@@ -30,7 +30,6 @@ bool GreedyBFS::Step()
     if (cell == end)
     {
         path = BuildPath(end);
-        done = true;
         return true;
     }
 

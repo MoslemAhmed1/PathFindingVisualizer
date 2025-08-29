@@ -1,7 +1,6 @@
 #pragma once
 
 #include "DEFS.h"
-#include "UI_Info.h"
 #include "Button.h"
 
 class Input;
@@ -22,12 +21,12 @@ class App
 
 	ActionType pendingAction; // Store the action waiting for a cell click
 
-	Flag currentFlag;
+	Flag currentFlag;	// Flag to separate different inputs
 
 public:
 
-	App();  // Constructor: where the Input, Ouput and Grid are allocated
-	~App(); // Destructor for needed deallocations
+	App();  
+	~App(); 
 
 	void Run();
 
@@ -40,6 +39,7 @@ public:
 	// 1- Get the ActionType
 	// 2- Read its parameters
 	// 3- Proceed with execution logic
+
 	void AddStart();
 	void AddEnd();
 	void AddWall();
@@ -48,6 +48,5 @@ public:
 	void Run_AStar();
 	void Run_GreedyBFS();
 	void Run_Generate_Maze();
-
 
 };

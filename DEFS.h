@@ -1,17 +1,15 @@
-#ifndef DEFS_H
-#define DEFS_H
+#pragma once
 
 // This file contains some global constants and definitions to be used in the project.
+// It also contains common includes which are used in many files
 #include "UI_Info.h"
 #include "CellPosition.h"
+#include "raylib.h"
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <set>
-#include <unordered_set>
 #include <queue>
 #include <stack>
-#include <map>
 #include <cmath>
 #include <string>
 #include <random>
@@ -83,5 +81,3 @@ enum MazeAlgorithm
 	PRIMS_ALGORITHM,
 	NO_MAZE_ALGORITHM
 };
-
-#endif

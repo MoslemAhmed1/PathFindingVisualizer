@@ -8,13 +8,12 @@ App::App()
 	float x = 50.0f;
 	float y = 10.0f;
 
-	string btn_text[7] = { "BFS", "Dijkstra", "A*", "Set Wall", "Set Start", "Set End", "Clear Grid" };
 	ButtonType type[7] = { BFS_BTN, DIJKSTRA_BTN, ASTAR_BTN, ADD_WALL_BTN, ADD_START_BTN, ADD_END_BTN, CLEAR_GRID_BTN };
 	
 	// Initialize buttons (First Row)
 	for (int i = 0; i < 7; i++)
 	{
-		Button* button = new Button(btn_text[i], { x, y , UI.ButtonWidth, UI.ButtonHeight }, type[i]);
+		Button* button = new Button({ x, y , UI.ButtonWidth, UI.ButtonHeight }, type[i]);
 		buttons.push_back(button);
 		x += (UI.ButtonWidth + spacing);
 	}
@@ -22,9 +21,9 @@ App::App()
 	// Initialize buttons (Second Row)
 	x = 50.0f;
 	y = 60.0f;
-	Button* GreedyBFS_BTN = new Button("Greedy BFS", { x, y , 160.0f, UI.ButtonHeight }, GREEDY_BFS_BTN);
+	Button* GreedyBFS_BTN = new Button({ x, y , 160.0f, UI.ButtonHeight }, GREEDY_BFS_BTN);
 	buttons.push_back(GreedyBFS_BTN);
-	Button* GenMaze_BTN = new Button("Greedy BFS", { x + 170.0f, y , 185.0f, UI.ButtonHeight }, GENERATE_MAZE_BTN);
+	Button* GenMaze_BTN = new Button({ x + 170.0f, y , 185.0f, UI.ButtonHeight }, GENERATE_MAZE_BTN);
 	buttons.push_back(GenMaze_BTN);
 
 
@@ -58,9 +57,7 @@ void App::Run()
 		// Render UI every frame
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
-		pOut->CreateToolBar();
 		pGrid->UpdateInterface();
-		pOut->ClearStatusBar();
 		pOut->PrintMessage(pGrid->GetMessage());
 		EndDrawing();
 
@@ -84,7 +81,7 @@ void App::Run()
 				if (position.IsValidCell())
 				{
 					pGrid->SetWallCell(position.VCell(), position.HCell());
-					WaitTime(0.01);
+					WaitTime(0.02);
 				}
 			}
 
@@ -173,13 +170,19 @@ void App::ExecGridAction(ActionType ActType, CellPosition position)
 		case ADD_START:
 			if (!pGrid->SetStartCell(position.VCell(), position.HCell())) 
 			{
-				pGrid->PrintMessage("There's already a start node, click on it to remove it!");
+				if (pGrid->GetStartCell())
+					pGrid->PrintMessage("There's already a start node, click on it to remove it!");
+				else
+					pGrid->PrintMessage("Can't set the start cell here!");
 			}
 			break;
 		case ADD_END:
 			if (!pGrid->SetEndCell(position.VCell(), position.HCell())) 
 			{
-				pGrid->PrintMessage("There's already an end node, click on it to remove it!");
+				if (pGrid->GetEndCell())
+					pGrid->PrintMessage("There's already an end node, click on it to remove it!");
+				else
+					pGrid->PrintMessage("Can't set the end cell here!");
 			}
 			break;
 		case ADD_WALL:
@@ -287,9 +290,7 @@ void App::Run_Generate_Maze()
 	{
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
-		pOut->CreateToolBar();
 		pGrid->UpdateInterface();
-		pOut->ClearStatusBar();
 		pOut->PrintMessage(pGrid->GetMessage());
 		EndDrawing();
 
@@ -317,6 +318,4 @@ void App::Run_Generate_Maze()
 	{
 		pGrid->PrintMessage("Generating Maze (DFS Backtracking) Algorithm...");
 	}
-	
-	
 }

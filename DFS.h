@@ -4,18 +4,14 @@
 
 class DFS
 {
-    Output* pOut;
     vector<vector<Cell*>>& G;
     stack<Cell*> mazeStack;
-    Cell* startingCell;
-    bool done;
 
 public:
     
-    DFS(vector<vector<Cell*>>& grid, Output* pOut);
+    DFS(vector<vector<Cell*>>& grid);
     void Init();
     bool Step();
-    bool IsDone() const;
     
 private:
     
@@ -25,3 +21,15 @@ private:
     // void Algorithm();
 };
 
+/*
+Algorithm Explanation:
+    // Note : PATHS = Odd Coordinates , WALLS = Even Coordinates
+
+    // 1- Choose a random cell to start with --> Mark as Visited --> Push to Stack
+    
+    // 2- Choose a random UNVISITED neighbour to the starting cell --> Mark as Visited --> Push to Stack
+    
+    // 3- Keep repeating [2.] till reaching a blocked path (All neighbours are visited)
+    
+    // 4- If reached a blocked path, backtrack till finding a cell with an unvisited neighbour.
+*/

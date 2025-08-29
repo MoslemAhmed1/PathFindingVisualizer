@@ -9,7 +9,7 @@ public:
 	CellPosition(); // Initializes the cell to (-1,-1) indicating not initialized with valid values
 	CellPosition(int v, int h); // Sets vCell and hCell if valid
 
-	// Note: this class does NOT deal with real coordinates, it deals with the "vCell", "hCell" and "cellNum" instead
+	// Note: this class does NOT deal with real coordinates, it deals with the "vCell", "hCell" instead
 	
 	bool SetVCell(int v); // The setter of vCell (the setter here sets only if "v" is in grid range)
 
