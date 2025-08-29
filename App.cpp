@@ -81,7 +81,7 @@ void App::Run()
 				if (position.IsValidCell())
 				{
 					pGrid->SetWallCell(position.VCell(), position.HCell());
-					WaitTime(0.02);
+					WaitTime(0.03);
 				}
 			}
 
