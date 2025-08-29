@@ -74,6 +74,9 @@ ActionType Input::GetUserAction() const
 		case GREEDY_BFS_BTN:
 			return RUN_GREEDY_BFS;
 			break;
+		case GENERATE_MAZE_BTN:
+			return RUN_GENERATE_MAZE;
+			break;
 		default:
 			return EMPTY;
 			break;

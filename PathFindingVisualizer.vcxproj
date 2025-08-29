@@ -142,6 +142,7 @@
     <ClCompile Include="BFS.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CellPosition.cpp" />
+    <ClCompile Include="DFS.cpp" />
     <ClCompile Include="Dijkstra.cpp" />
     <ClCompile Include="GreedyBFS.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Output.cpp" />
+    <ClCompile Include="Prim.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
@@ -158,12 +160,14 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="CellPosition.h" />
     <ClInclude Include="DEFS.h" />
+    <ClInclude Include="DFS.h" />
     <ClInclude Include="Dijkstra.h" />
     <ClInclude Include="GreedyBFS.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Output.h" />
+    <ClInclude Include="Prim.h" />
     <ClInclude Include="UI_Info.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

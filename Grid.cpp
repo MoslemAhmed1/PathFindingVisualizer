@@ -3,6 +3,8 @@
 #include "Dijkstra.h"
 #include "Astar.h"
 #include "GreedyBFS.h"
+#include "DFS.h"
+#include "Prim.h"
 
 Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn, pOut
 {
@@ -24,6 +26,8 @@ Grid::Grid(Input* pIn, Output* pOut) : pIn(pIn), pOut(pOut) // Initializing pIn,
     dijkstra = nullptr;
     astar = nullptr;
     greedyBFS = nullptr;
+    dfs = nullptr;
+    prim = nullptr;
     algorithmRunning = false;
     currentAlgorithm = NO_CHOSEN_ALGORITHM;
 
@@ -77,10 +81,22 @@ void Grid::StepAlgorithm()
     case GREEDY_BFS_ALGORITHM:
         if (greedyBFS) done = greedyBFS->Step();
         break;
+    case GENERATE_MAZE_ALGORITHM:
+        if (prim) done = prim->Step();
+        else if (dfs) done = dfs->Step();
+        break;
     }
     if (done) 
     {
         algorithmRunning = false;
+        if (currentAlgorithm == GENERATE_MAZE_ALGORITHM)
+        {
+            ClearPath();
+            PrintMessage("Maze Generated!");
+            // if (prim) prim = nullptr;
+            // if (dfs) dfs = nullptr;
+            return;
+        }
         PrintPath(currentAlgorithm);
     }
 }
@@ -137,6 +153,34 @@ void Grid::PrintPath(ChosenAlgorithm algorithm)
             EndDrawing();
             WaitTime(0.01);
         }
+    }
+}
+
+void Grid::GenerateMaze(MazeAlgorithm algorithm)
+{
+    // Reset previous algorithm pointers
+    if (prim) {
+        delete prim;
+        prim = nullptr;
+    }
+    if (dfs) {
+        delete dfs;
+        dfs = nullptr;
+    }
+
+    ClearGrid();
+
+    algorithmRunning = true;
+    currentAlgorithm = GENERATE_MAZE_ALGORITHM;
+    if (algorithm == PRIMS_ALGORITHM)
+    {
+        prim = new Prim(grid, pOut);
+        prim->Init();
+    }
+    else if (algorithm == DFS_ALGORITHM)
+    {
+        dfs = new DFS(grid, pOut);
+        dfs->Init();
     }
 }
 
@@ -300,8 +344,10 @@ void Grid::ClearPath()
         }
     }
 
-    start->SetCellState(START);
-    end->SetCellState(END);
+    if(start)
+        start->SetCellState(START);
+    if(end)
+        end->SetCellState(END);
 
     msg = "";
     pOut->ClearStatusBar();
@@ -327,4 +373,6 @@ Grid::~Grid()
     if (dijkstra) delete dijkstra;
     if (astar) delete astar;
     if (greedyBFS) delete greedyBFS;
+    if (dfs) delete dfs;
+    if (prim) delete prim;
 }

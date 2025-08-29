@@ -29,6 +29,7 @@ Output::Output(vector<Button*>& buttons) : buttons(buttons)
 
 	// Initializing Button Textures (Second Row)
 	icons[GREEDY_BFS_BTN] = LoadTexture("assets/img/GBFS.png");
+	icons[GENERATE_MAZE_BTN] = LoadTexture("assets/img/GenMaze.png");
 
 	// Load Font
 	font = LoadFont("assets/fonts/Verdana-Bold.ttf");
@@ -119,17 +120,37 @@ void Output::ClearGridArea() const
 
 void Output::CreateToolBar() const
 {
+	Vector2 mousePos = GetMousePosition();
+	bool hovered = false;
+
 	for (int i = 0; i < buttons.size(); i++)
 	{
 		Rectangle bounds = buttons[i]->buttonBounds;
 		ButtonType type = buttons[i]->buttonType;
 
+		bool isHovered = CheckCollisionPointRec(mousePos, bounds);
+
 		Texture2D icon = icons[type];
 		Vector2 iconPos = { bounds.x + (bounds.width - icon.width) / 2,
 						   bounds.y + (bounds.height - icon.height) / 2 };
 
-		DrawTextureEx(icon, iconPos, 0.0f, 1.0f, WHITE);
-	}
+		if (isHovered)
+		{
+			hovered = true;
+			iconPos.x = iconPos.x - (0.05f * bounds.width)/2;
+			iconPos.y = iconPos.y - (0.05f * bounds.height)/2;
+			DrawTextureEx(icon, iconPos, 0.0f, 1.05f, Fade(WHITE, 0.9f));
+		}
+		else
+		{
+			DrawTextureEx(icon, iconPos, 0.0f, 1.0f, WHITE);
+		}
+	}		
+	
+	if(hovered)
+		SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+	else
+		SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

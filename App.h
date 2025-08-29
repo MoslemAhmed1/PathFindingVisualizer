@@ -47,6 +47,7 @@ public:
 	void Run_Dijkstra();
 	void Run_AStar();
 	void Run_GreedyBFS();
+	void Run_Generate_Maze();
 
 
 };

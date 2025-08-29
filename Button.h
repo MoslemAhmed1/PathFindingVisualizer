@@ -19,20 +19,3 @@ public:
 	~Button();
 };
 
-/*
-
-In Main :
-Button buttonName( text , buttonPosition );
-
-In Main Loop :
-
-Vector2 mousePosition = GetMousePosition();
-bool mousePressed = IsMousePressed(MOUSE_BUTTON_LEFT);
-
-if(buttonName.isPressed(mousePosition, mousePressed))
-{
-	Action
-}
-
-*/
-

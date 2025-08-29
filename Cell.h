@@ -60,3 +60,22 @@ struct CellComparator
 		return lhs->GetTotalCost() > rhs->GetTotalCost(); // Min-heap: smaller totalCost has higher priority
 	}
 };
+
+struct CellHash 
+{
+	std::size_t operator()(const Cell* cell) const 
+	{
+		// Hash based on cell coordinates
+		return std::hash<int>()(cell->GetCellPosition().VCell() * 1000 + cell->GetCellPosition().HCell());
+	}
+};
+
+struct CellEqual 
+{
+	bool operator()(const Cell* a, const Cell* b) const 
+	{
+		// Equality based on cell coordinates
+		return a->GetCellPosition().VCell() == b->GetCellPosition().VCell() &&
+			a->GetCellPosition().HCell() == b->GetCellPosition().HCell();
+	}
+};

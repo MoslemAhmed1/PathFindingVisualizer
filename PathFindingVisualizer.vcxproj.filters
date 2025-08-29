@@ -49,6 +49,12 @@
     <ClCompile Include="GreedyBFS.cpp">
       <Filter>Algorithms</Filter>
     </ClCompile>
+    <ClCompile Include="DFS.cpp">
+      <Filter>Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Prim.cpp">
+      <Filter>Algorithms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BFS.h">
@@ -89,6 +95,12 @@
     </ClInclude>
     <ClInclude Include="APP_Info.h" />
     <ClInclude Include="GreedyBFS.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="DFS.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Prim.h">
       <Filter>Algorithms</Filter>
     </ClInclude>
   </ItemGroup>

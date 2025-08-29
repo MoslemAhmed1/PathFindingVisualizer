@@ -14,6 +14,8 @@ class BFS;
 class Dijkstra;
 class Astar;
 class GreedyBFS;
+class DFS;
+class Prim;
 
 class Grid
 {
@@ -32,6 +34,8 @@ class Grid
 	Dijkstra* dijkstra;
 	Astar* astar;
 	GreedyBFS* greedyBFS;
+	DFS* dfs;
+	Prim* prim;
 	bool algorithmRunning;
 
 public:
@@ -46,6 +50,8 @@ public:
 	void StepAlgorithm();
 
 	void PrintPath(ChosenAlgorithm algorithm);
+
+	void GenerateMaze(MazeAlgorithm algorithm);
 
 // ========= Others ========= //
 

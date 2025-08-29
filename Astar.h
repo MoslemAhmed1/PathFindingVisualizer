@@ -9,7 +9,7 @@ class Astar
     Cell* start;
     Cell* end;
     priority_queue<Cell*, vector<Cell*>, CellComparator> frontier;
-    float oldCost[NumVerticalCells][NumHorizontalCells];
+    double oldCost[NumVerticalCells][NumHorizontalCells];
     bool done;
     vector<Cell*> path;
 

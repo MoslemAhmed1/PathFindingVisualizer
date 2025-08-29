@@ -4,9 +4,9 @@
 App::App()
 {	
 	// Spacing between buttons
-	int spacing = 10;
-	float x = 50;
-	float y = 10;
+	float spacing = 10.0f;
+	float x = 50.0f;
+	float y = 10.0f;
 
 	string btn_text[7] = { "BFS", "Dijkstra", "A*", "Set Wall", "Set Start", "Set End", "Clear Grid" };
 	ButtonType type[7] = { BFS_BTN, DIJKSTRA_BTN, ASTAR_BTN, ADD_WALL_BTN, ADD_START_BTN, ADD_END_BTN, CLEAR_GRID_BTN };
@@ -20,10 +20,12 @@ App::App()
 	}
 
 	// Initialize buttons (Second Row)
-	x = 50;
-	y = 60;
-	Button* button = new Button("Greedy BFS", { x, y , 160.0f, UI.ButtonHeight }, GREEDY_BFS_BTN);
-	buttons.push_back(button);
+	x = 50.0f;
+	y = 60.0f;
+	Button* GreedyBFS_BTN = new Button("Greedy BFS", { x, y , 160.0f, UI.ButtonHeight }, GREEDY_BFS_BTN);
+	buttons.push_back(GreedyBFS_BTN);
+	Button* GenMaze_BTN = new Button("Greedy BFS", { x + 170.0f, y , 185.0f, UI.ButtonHeight }, GENERATE_MAZE_BTN);
+	buttons.push_back(GenMaze_BTN);
 
 
 	// Create Input, Output and Grid
@@ -152,6 +154,10 @@ void App::ExecuteAction(ActionType ActType)
 		Run_GreedyBFS();
 		break;
 
+	case RUN_GENERATE_MAZE:
+		Run_Generate_Maze();
+		break;
+
 	case STATUS:
 	case EMPTY:
 		return;
@@ -271,4 +277,46 @@ void App::Run_GreedyBFS()
 	{
 		pGrid->PrintMessage("Set start and end points first!");
 	}
+}
+
+void App::Run_Generate_Maze()
+{
+	MazeAlgorithm chosenMazeAlgorithm = NO_MAZE_ALGORITHM;
+	pGrid->PrintMessage("Press 'P' for Prim's, 'D' for Backtracking (DFS), 'E' for Exit.");
+	while (!WindowShouldClose() && chosenMazeAlgorithm == NO_MAZE_ALGORITHM)
+	{
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+		pOut->CreateToolBar();
+		pGrid->UpdateInterface();
+		pOut->ClearStatusBar();
+		pOut->PrintMessage(pGrid->GetMessage());
+		EndDrawing();
+
+		if (IsKeyPressed(KEY_P))
+			chosenMazeAlgorithm = PRIMS_ALGORITHM;
+		else if (IsKeyPressed(KEY_D))
+			chosenMazeAlgorithm = DFS_ALGORITHM;
+		else if (IsKeyPressed(KEY_E))
+		{
+			pGrid->PrintMessage("Generate Maze Mode Exited");
+			return;
+		}
+	}
+
+	pGrid->ClearPath();
+	pGrid->GenerateMaze(chosenMazeAlgorithm);
+	currentFlag = ALGORITHM_RUNNING;
+
+	if (chosenMazeAlgorithm == PRIMS_ALGORITHM)
+	{
+		pGrid->PrintMessage("Generating Maze (Prim's) Algorithm...");
+	}
+
+	else if (chosenMazeAlgorithm == DFS_ALGORITHM)
+	{
+		pGrid->PrintMessage("Generating Maze (DFS Backtracking) Algorithm...");
+	}
+	
+	
 }

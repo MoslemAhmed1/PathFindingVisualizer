@@ -1,7 +1,7 @@
 #pragma once
 
-#define NumVerticalCells 20
-#define NumHorizontalCells 30
+#define NumVerticalCells 21
+#define NumHorizontalCells 31
 
 #include "raylib.h"
 
@@ -20,9 +20,10 @@ struct UI_Info	// User Interface Info.
 
 	int CellSize = 20;				// Size of the cell
 	int CellGap = 2;				// Gap between cells
-	int LeftMargin = 200, TopMargin = 30;
 	int GridWidth = (NumHorizontalCells * CellSize); // 600
 	int GridHeight = (NumVerticalCells * CellSize); // 400
+	int LeftMargin = (width - GridWidth) / 2;
+	int TopMargin = 10;
 
 	// Pen Colors of messages of status bar and players' info
 	int MsgFontSize = 20;

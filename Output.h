@@ -12,7 +12,7 @@ private:
 
 	vector<Button*> buttons; // Store buttons for redrawing
 
-	Texture2D icons[8];
+	Texture2D icons[9];
 
 	Font font;
 

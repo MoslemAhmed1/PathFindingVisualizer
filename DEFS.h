@@ -7,10 +7,14 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <set>
+#include <unordered_set>
 #include <queue>
+#include <stack>
 #include <map>
 #include <cmath>
 #include <string>
+#include <random>
 using namespace std;
 
 enum ChosenAlgorithm
@@ -19,6 +23,7 @@ enum ChosenAlgorithm
 	DIJKSTRA_ALGORITHM,
 	ASTAR_ALGORITHM,
 	GREEDY_BFS_ALGORITHM,
+	GENERATE_MAZE_ALGORITHM,
 	NO_CHOSEN_ALGORITHM
 };
 
@@ -32,6 +37,7 @@ enum ActionType
 	ADD_END,
 	CLEAR_GRID,
 	RUN_GREEDY_BFS,
+	RUN_GENERATE_MAZE,
 
 	EMPTY,				// Empty Area in ToolBar (NOT inside any action icon)
 	GRID_AREA,			// Inside Grid Area
@@ -59,6 +65,7 @@ enum ButtonType
 	ADD_END_BTN,
 	CLEAR_GRID_BTN,
 	GREEDY_BFS_BTN,
+	GENERATE_MAZE_BTN,
 	NONE
 };
 
@@ -68,6 +75,13 @@ enum Flag
 	ALGORITHM_RUNNING,
 	SETTING_WALLS,
 	NO_CURRENT_FLAG
+};
+
+enum MazeAlgorithm
+{
+	DFS_ALGORITHM,
+	PRIMS_ALGORITHM,
+	NO_MAZE_ALGORITHM
 };
 
 #endif
