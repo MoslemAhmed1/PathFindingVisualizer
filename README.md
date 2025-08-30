@@ -1,6 +1,6 @@
 # Pathfinding Visualizer
 
-![Pathfinding Visualizer Demo](assets/screenshots pathfinder.png) <!-- Placeholder for a demo GIF or screenshot; replace with actual if available -->
+![Pathfinding Visualizer Demo](assets/pathfinder.jpg) <!-- Placeholder for a demo GIF or screenshot; replace with actual if available -->
 
 ## Overview
 
@@ -67,12 +67,6 @@ This project uses **Raylib**, a simple and easy-to-use library for video game pr
 - Mouse: Click on toolbar buttons or grid cells.
 - Keyboard (during maze generation): 'P' for Prim's, 'D' for DFS, 'E' to exit mode.
 - Keyboard (during setting walls): 'E' to exit mode.
-
-## Screenshots
-
-![Toolbar and Grid](assets/screenshots/toolbar.png) <!-- Replace with actual screenshots -->
-![Pathfinding in Action](assets/screenshots/pathfinding.png)
-![Maze Generation](assets/screenshots/maze.png)
 
 ## Dependencies
 - **Raylib**: For GUI, input, and rendering.
