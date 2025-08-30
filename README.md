@@ -1,6 +1,6 @@
 # Pathfinding Visualizer
 
-![Pathfinding Visualizer Demo](assets/pathfinder.jpg) <!-- Placeholder for a demo GIF or screenshot; replace with actual if available -->
+![Pathfinding Visualizer Interface](assets/pathfinder.JPG) <!-- Placeholder for a demo GIF or screenshot; replace with actual if available -->
 
 ## Overview
 
